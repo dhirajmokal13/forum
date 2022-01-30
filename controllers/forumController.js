@@ -85,7 +85,7 @@ class forumController {
         title: "Forum | Home",
       });
     } catch (error) {
-      console.log(error);
+      res.send(error);
     }
   };
   //Signup form data fetch start here
