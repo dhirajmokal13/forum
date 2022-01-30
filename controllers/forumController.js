@@ -73,7 +73,6 @@ class forumController {
 
   //Signup form data fetch start here
   static getAllDoc = async (req, res) => {
-    res.send("hi")
     try {
       const forum_questions = await sch.ques.find().sort({ views: -1 }).limit(5);
      const catogories = await sch.cato.find();
