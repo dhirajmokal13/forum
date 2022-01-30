@@ -6,7 +6,7 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 const app = express();
 const port = process.env.PORT || "3000";
-const DATABASE_URL = "mongodb://localhost:27017";
+const DATABASE_URL = "mongodb+srv://dhirajmokal14:Dhiraj@866@cluster0.zn7xs.mongodb.net/forum?retryWrites=true&w=majority";
 
 // database connection
 conn(DATABASE_URL);
