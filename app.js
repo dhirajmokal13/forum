@@ -39,7 +39,7 @@ app.use(session({
 }))
 
 // Load Routes
-app.use("https://dashboard.heroku.com/",web)
+app.use("/",web)
 //app.use("/catogories",web)
 
 app.listen(port, () => {
