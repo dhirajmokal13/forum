@@ -22,7 +22,7 @@ app.set("view engine","ejs");
 // Mongodb Session
 const sessionStorage = MongoStore.create({
   mongoUrl: DATABASE_URL,
-  dbName: 'forum',
+  dbName: 'forums',
   collectionName: 'sessions',
   ttl: 18000,
   autoRemove: 'native',
