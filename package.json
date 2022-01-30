@@ -1,14 +1,14 @@
 {
   "name": "forum1",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is forum site for questions and answers",
   "main": "app.js",
   "scripts": {
     "dev": "nodemon app",
     "start": "node app.js"
   },
   "keywords": [],
-  "author": ""DhirajMokal,
+  "author": "DhirajMokal",
   "license": "ISC",
   "type": "module",
   "dependencies": {
