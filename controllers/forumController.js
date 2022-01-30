@@ -76,7 +76,7 @@ class forumController {
     res.send("hi")
     try {
       const forum_questions = await sch.ques.find().sort({ views: -1 }).limit(5);
-     /const catogories = await sch.cato.find();
+     const catogories = await sch.cato.find();
       res.render("index", {
         forum_questions: forum_questions,
         current: req.url,
