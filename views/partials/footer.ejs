@@ -1,0 +1,98 @@
+<hr class="mt-5">
+<div class="container-fluid mx-1 my-4 px-5">
+    <form id="contact">
+        <div class="mb-3">
+            <label for="cname" class="form-label">Name</label>
+            <input type="text" class="form-control" id="cname" name="cname" aria-describedby="cnameHelp" required />
+        </div>
+        <div class="mb-3">
+            <label for="cemail" class="form-label">Email id</label>
+            <input type="email" class="form-control" id="cemail" name="cemail" required />
+        </div>
+        <div class="mb-3">
+            <label for="ccomment" class="form-label">Comment</label>
+            <textarea class="form-control" id="ccomment" name="ccomment" rows="3" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" id="contact_form_submit">Submit</button>
+        <button type="reset" class="btn btn-primary">Reset</button>
+    </form>
+</div>
+<script>
+    let contact_form_submit = document.getElementById("contact_form_submit");
+    contact_form_submit.addEventListener("click", (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        let cname = document.getElementById("cname").value;
+        let cemail = document.getElementById("cemail").value;
+        let ccomment = document.getElementById("ccomment").value;
+        let mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+        let email_validate = cemail.match(mailformat)
+        if (cname == "" || cemail == "" || email_validate == null) {
+            swal("Error", "Please Check the data", "error");
+        } else {
+            let xhr2 = new XMLHttpRequest();
+            xhr2.open("POST", "/contact_form", true);
+            xhr2.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr2.onload = function () {
+                if(this.responseText == "true"){
+                    swal("Success", "Your Responce submitted Successfully", "success");
+                    document.getElementById("contact").reset();
+                }else{
+                    swal("Error", "Something Went to Wrong", "error");
+                }
+            }
+            let cont_data = "cname=" + cname + "&" + "cemail=" + cemail + "&" + "ccomment=" + ccomment;
+            xhr2.send(cont_data);
+        }
+    })
+</script>
+<footer class="text-center text-white" style="background-color: #f1f1f1;">
+    <!-- Grid container -->
+    <div class="container pt-4">
+        <!-- Section: Social media -->
+        <section class="mb-4">
+            <!-- Facebook -->
+            <a class="btn btn-link btn-floating btn-lg text-dark m-1" href="#!" role="button"
+                data-mdb-ripple-color="dark"><i class="fab fa-facebook-f"></i></a>
+
+            <!-- Twitter -->
+            <a class="btn btn-link btn-floating btn-lg text-dark m-1" href="#!" role="button"
+                data-mdb-ripple-color="dark"><i class="fab fa-twitter"></i></a>
+
+            <!-- Google -->
+            <a class="btn btn-link btn-floating btn-lg text-dark m-1" href="#!" role="button"
+                data-mdb-ripple-color="dark"><i class="fab fa-google"></i></a>
+
+            <!-- Instagram -->
+            <a class="btn btn-link btn-floating btn-lg text-dark m-1" href="#!" role="button"
+                data-mdb-ripple-color="dark"><i class="fab fa-instagram"></i></a>
+
+            <!-- Linkedin -->
+            <a class="btn btn-link btn-floating btn-lg text-dark m-1" href="#!" role="button"
+                data-mdb-ripple-color="dark"><i class="fab fa-linkedin"></i></a>
+            <!-- Github -->
+            <a class="btn btn-link btn-floating btn-lg text-dark m-1" href="#!" role="button"
+                data-mdb-ripple-color="dark"><i class="fab fa-github"></i></a>
+        </section>
+        <!-- Section: Social media -->
+    </div>
+    <!-- Grid container -->
+
+    <!-- Copyright -->
+    <div class="text-center text-dark p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        © <%if(new Date().getFullYear()==2022){%>
+            <%=`${new Date().getFullYear()}`%>
+                <% }else{%>
+                    <%=`2022 - ${new Date().getFullYear()}`%>
+                        <%}%>
+                            <a class="text-dark" href="/">dhirajmokal</a>
+    </div>
+    <!-- Copyright -->
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</body>
+
+</html>

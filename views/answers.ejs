@@ -1,0 +1,44 @@
+<%- include('./partials/header.ejs') %>
+<div class="card">
+  <div class="card-header">
+    <span class="text-secondary"> At </span> <span class="text-primary"><%= moment(new Date(main_question.dt)).format('D MMMM YY h:m A'); %></span><span class="text-secondary"> By </span><span class="text-primary"><%-main_question.uname%></span>  <span class="text-danger"><%-main_question.views%> Views</span>
+  </div>
+    <div class="card-body">
+      <h4 class="card-title"><%-main_question.question_title%></h4>
+      <p class="card-text"><%-main_question.question_body%></p>
+    </div>
+</div>
+  <div class="container my-4">
+    <%if(answers == ""){%>
+      <h3>There is not any discussion</h3>
+      <hr>
+      <%}else{%>
+        <%answers.forEach((item)=>{%>
+          <div class="card mt-2">
+              <div class="card-header">
+                  <%= moment(new Date(item.dt)).format('D MMMM YY h:m A'); %> 
+              </div>
+              <div class="card-body">
+                  <p class="card-text"><%-item.posted_by%></p>
+                <h5 class="card-title"><%-item.answers%></h5>
+              </div>
+            </div> 
+      <%})%>
+    <%}%>
+  </div>
+
+  <div class="container">
+    <%if(session.login == true){%>
+    <form action="/post/answers" method="post">
+        <div class="mb-3 mt-5">
+          <input type="text" name="answers" class="form-control" id="answers" placeholder="Please type answer here" required/>
+        </div>
+        <input type="hidden" name="current_page" value=<%-current%>>
+        <input type="hidden" name="id" value=<%-id%>>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+      <%}else{%>
+        <h4 class="mt-4 text-danger">Login For Post the Answers</h4>
+      <%}%>
+  </div>
+<%- include('./partials/footer.ejs') %>
