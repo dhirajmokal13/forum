@@ -2,7 +2,8 @@ import  Mongoose  from "mongoose";
 const conn = async (DATABASE_URL) => {
     try {
         const DB_OPTIONS = {
-            dbName: "forum",
+           useNewUrlParser: true,
+           useUnifiedTopology: true,
         };
         await Mongoose.connect(DATABASE_URL, DB_OPTIONS);
         console.log("Connected Successfully");
