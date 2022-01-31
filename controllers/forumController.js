@@ -185,7 +185,18 @@ class forumController {
         answers,
         title: `Answers | ${main_question.question_title}`
       });
-      await sch.ques.updateOne({ _id: req.params.id }, { $inc: { views: 1 } });
+      //start
+      let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+      const check_user_view = await sch.user.findOne({ip:ip,post_id:req.params.id})
+      if(check_user_view == null){
+        await sch.ques.updateOne({ _id: req.params.id }, { $inc: { views: 1 } });
+        const doc = new sch.user({
+          ip,
+          post_id:req.params.id
+        });
+        const result = await doc.save();
+      }
+      //end 
     } catch (error) {
       console.log(error);
     }
