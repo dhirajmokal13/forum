@@ -41,11 +41,18 @@ const ansSchema = new Mongoose.Schema({
   dt: { type: Date, default: Date.now },
 });
 
+const userSchema = new Mongoose.Schema({
+  ip: { type: String, required: true, trim: true },
+  expire_at: {type: Date, default: Date.now, expires: 3600},
+  // This will Expire after 1 houre
+});
+
 const sch = {
   signup: Mongoose.model("account", signupSchema),
   cont: Mongoose.model("contact", contSchema),
   cato: Mongoose.model("categories", catoSchema),
   ques: Mongoose.model("forum_question", queSchema),
   ans: Mongoose.model("forum_answer", ansSchema),
+  user: Mongoose.model("users_ip", userSchema),
 };
 export default sch;
