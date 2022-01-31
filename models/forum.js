@@ -43,6 +43,7 @@ const ansSchema = new Mongoose.Schema({
 
 const userSchema = new Mongoose.Schema({
   ip: { type: String, required: true, trim: true },
+  post_id: { type: String, required: true, trim: true},
   expire_at: {type: Date, default: Date.now, expires: 3600},
   // This will Expire after 1 houre
 });
