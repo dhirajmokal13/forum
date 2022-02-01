@@ -16,7 +16,7 @@ class forumController {
       //res.status(201).redirect(current_page);
       res.status(201).send(true);
     } catch (err) {
-      console.log(err);
+      res.status(404).send("Something went to Wrong");
     }
   };
   // contact form end
@@ -39,7 +39,7 @@ class forumController {
         res.send("Username not found");
       }
     } catch (err) {
-      console.log(err);
+      res.status(404).send("Something went to Wrong");
     }
   };
   //login end here
@@ -109,7 +109,7 @@ class forumController {
         title: `Forum | All Categories`,
       });
     } catch (error) {
-      console.log(error);
+      res.status(404).send("Something went to Wrong");
     }
   };
   //all catogories end here
@@ -132,7 +132,7 @@ class forumController {
         title: `Category | ${req.params.cat_name}`
       });
     } catch (err) {
-      console.log(err);
+      res.status(404).send("Something went to Wrong");
     }
   };
 
@@ -151,7 +151,7 @@ class forumController {
       const result = await doc.save();
       res.redirect(req.url);
     } catch (err) {
-      console.log(err);
+      res.status(404).send("Something went to Wrong");
     }
   };
 
@@ -198,7 +198,7 @@ class forumController {
       }
       //end 
     } catch (error) {
-      console.log(error);
+      res.status(404).send("Something went to Wrong");
     }
   };
 
@@ -213,7 +213,7 @@ class forumController {
       await doc.save();
       res.redirect(current_page);
     } catch (err) {
-      console.log(err);
+      res.status(404).send("Something went to Wrong");
     }
   };
   static notfound = async (req, res) => {
