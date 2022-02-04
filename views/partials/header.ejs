@@ -52,15 +52,15 @@
         </ul>
         <div class="d-flex">
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
+          <button class="btn btn-outline-success me-2" type="submit">Search</button>
         </div>
 
         <%if(session.login==true){%>
-          <button type="button" class="btn btn-outline-primary ms-2" data-bs-toggle="modal" data-bs-target="#myacc">
+          <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#myacc">
             Account
           </button>
           <%}else{%>
-            <button type="button" class="btn btn-outline-primary ms-2" id="signup-btn" data-bs-toggle="modal" data-bs-target="#signup">
+            <button type="button" class="btn btn-outline-primary" id="signup-btn" data-bs-toggle="modal" data-bs-target="#signup">
               signup
             </button>
             <button type="button" class="btn btn-outline-primary ms-2" data-bs-toggle="modal" data-bs-target="#login">
