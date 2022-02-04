@@ -2,7 +2,7 @@
     <!--<%-current%>-->
     <div class="container my-3">
         <%if(all == true){%>
-        <%-no_of_questions%>
+         <%q_no=0%>
             <%catogories.forEach((item)=>{%>
                 <div class="card my-3 text-center">
                     <div class="card-header">
@@ -19,7 +19,8 @@
                             <%-item.cat_name%></a>
                     </div>
                     <div class="card-footer text-muted">
-                        2 days ago
+                        <%-no_of_questions[q_no]%> Questions
+                        <%q_no++;%>
                     </div>
                 </div>
             <%})%>
