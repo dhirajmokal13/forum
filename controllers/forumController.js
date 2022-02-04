@@ -94,18 +94,18 @@ class forumController {
   static catogories = async (req, res) => {
     try {
       const catogories = await sch.cato.find();
-      catogories.forEach(async (it) => {
-        let ques = await sch.ques.find({ question_type: it.cat_name }).count();
-        //console.log(acc[0].name)
-        let name = it._id;
-        //console.log(name)
-        //let no_of_quest = { name: ques };
-      });
+      for (let i = 0; i < catogories.length; i++){
+        console.log(catogories[i].cat_name);
+        let cat = catogories[i].cat_name;
+        let no_of_questions = await sch.ques.find({question_type:catogories[i].cat_name}).count();
+        obj.push(no_of_questions)
+      }
       res.render("catogories", {
         current: req.url,
         session: req.session,
         catogories: catogories,
         all: true,
+        no_of_questions,
         title: `Forum | All Categories`,
       });
     } catch (error) {
