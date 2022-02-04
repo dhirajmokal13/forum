@@ -92,6 +92,7 @@ class forumController {
 
   //catogories page start here all catogories
   static catogories = async (req, res) => {
+    let obj =[]
     try {
       const catogories = await sch.cato.find();
       for (let i = 0; i < catogories.length; i++){
@@ -105,7 +106,7 @@ class forumController {
         session: req.session,
         catogories: catogories,
         all: true,
-        no_of_questions,
+        no_of_questions: obj,
         title: `Forum | All Categories`,
       });
     } catch (error) {
