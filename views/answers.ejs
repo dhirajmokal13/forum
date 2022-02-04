@@ -29,14 +29,14 @@
 
   <div class="container">
     <%if(session.login == true){%>
-    <div class="row">
+    <div class="row g-3">
     <form action="/post/answers" method="post">
-        <div class="mb-3 mt-5 col">
+        <div class="mb-3 mt-5 col-auto">
           <input type="text" name="answers" class="form-control" id="answers" placeholder="Please type answer here" required/>
         </div>
         <input type="hidden" name="current_page" value=<%-current%>>
         <input type="hidden" name="id" value=<%-id%>>
-        <div class="col">
+        <div class="col-auto">
         <button type="submit" class="btn btn-primary">Submit</button>
         </div>
       </form>
