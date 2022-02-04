@@ -85,24 +85,24 @@
             <form action="/create-acc" method="post">
               <div class="mb-3">
                 <label for="sname" class="form-label">Name</label>
-                <input type="text" name="sname" class="form-control" id="sname" aria-describedby="snameHelp" required />
+                <input type="text" name="sname" class="form-control" id="sname" autocomplete="name" aria-describedby="snameHelp" required />
               </div>
               <div class="mb-3">
                 <label for="smnumber" class="form-label">Mobile number</label>
-                <input type="number" name="smnumber" class="form-control" id="smnumber" minlength="10" maxlength="10"
+                <input type="number" name="smnumber" class="form-control" autocomplete="mobile number" id="smnumber" minlength="10" maxlength="10"
                   required />
               </div>
               <div class="mb-3">
                 <label for="saddr" class="form-label">Address</label>
-                <input type="text" name="saddr" class="form-control" id="saddr" required />
+                <input type="text" name="saddr" class="form-control" autocomplete="address" id="saddr" required />
               </div>
               <div class="mb-3">
                 <label for="sdob" class="form-label">Date Of Birth</label>
-                <input type="date" name="sdob" class="form-control" id="sdob" required />
+                <input type="date" name="sdob" class="form-control" autocomplete="off" id="sdob" required />
               </div>
               <div class="mb-3">
                 <label for="suname" class="form-label">Username</label>
-                <input type="text" name="suname" class="form-control" id="suname" required />
+                <input type="text" name="suname" autocomplete="username" class="form-control" id="suname" required />
                 <div id="unamealert" class="form-text mt-2"></div>
               </div>
               <div class="mb-3">
@@ -134,7 +134,7 @@
             <form action="/login" method="post">
               <div class="mb-3">
                 <label for="luname" class="form-label">Uername</label>
-                <input type="text" class="form-control" name="luname" id="luname" aria-describedby="lunameHelp"
+                <input type="text" class="form-control" name="luname" id="luname" autocomplete="username" aria-describedby="lunameHelp"
                   required />
               </div>
               <div class="mb-3">
