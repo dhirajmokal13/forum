@@ -29,14 +29,18 @@
 
   <div class="container">
     <%if(session.login == true){%>
+    <div class="row">
     <form action="/post/answers" method="post">
-        <div class="mb-3 mt-5">
+        <div class="mb-3 mt-5 col">
           <input type="text" name="answers" class="form-control" id="answers" placeholder="Please type answer here" required/>
         </div>
         <input type="hidden" name="current_page" value=<%-current%>>
         <input type="hidden" name="id" value=<%-id%>>
+        <div class="col">
         <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
       </form>
+    </div>
       <%}else{%>
         <h4 class="mt-4 text-danger">Login For Post the Answers</h4>
       <%}%>
