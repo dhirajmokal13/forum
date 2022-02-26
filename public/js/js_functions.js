@@ -1,6 +1,7 @@
 function replace_special_chars(txt){
     let ra = txt.replace(/>/g,"&gt;")
-    let ram = ra.replace(/</g,"&lt;")
+    let ran = ra.replace(/</g,"&lt;")
+    let ram = ran.replace(/ /g,"&nbsp;")
     return ram;
 }
 
