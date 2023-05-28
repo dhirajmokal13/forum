@@ -1,0 +1,37 @@
+<%- include('./partials/header.ejs') %>
+<%if(session.login){%>
+    <script src="https://cdn.tiny.cloud/1/<%-session.tinyApiKey%>/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+        selector: '#question_body',
+        height: 230,
+        menubar: false,
+        plugins: 'preview fullscreen lists advlist code link help wordcount',
+        toolbar: 'undo redo | styles fontfamily fontsize | ' +'forecolor preview  fullscreen | link code | numlist bullist | outdent indent | ' +'removeformat help',
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+      });
+    </script>
+<%}%>
+
+<div class="container mt-5">
+    <h3 class="text-secondary">Update Question</h3>
+        <%if(session.login == true){%>
+            <form action='/question/update/' method="post">
+                <div class="mb-3">
+                  <label for="question_title" class="form-label">Question Title</label>
+                  <input type="text" class="form-control" value="<%-Question.question_title%>" name="question_title" aria-describedby="question_titleHelp" placeholder="Question title" required/>
+                </div>
+                <div class="mb-3">
+                    <label for="question_type" class="form-label">Question Category</label>
+                    <input type="text" class="form-control" value="<%-Question.question_type%>" disabled>
+                </div>
+                <input type="hidden" value=<%-Question._id%> name="qid">
+                <div class="mb-3">
+                    <label for="question_body" class="form-label">Question</label>
+                    <textarea class="form-control" name="question_body" id="question_body" rows="3" placeholder="Enter Question Here"><%-Question.question_body%></textarea>
+                </div>
+                <button type="submit" id="QUpdateBtn" class="btn btn-primary">Update</button>
+              </form>
+        <%}%>
+    </div>
+<%- include('./partials/footer.ejs') %>

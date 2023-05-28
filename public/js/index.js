@@ -56,5 +56,29 @@ document.getElementsByName("likeBtn").forEach((datas) => {
 
 document.getElementById("searchBtn").addEventListener("click", () => {
   const searchTxt = document.getElementById("serachBox").value;
-  searchTxt ? location.href = `/search/${searchTxt}` : console.error("Search box is Empty");
+  searchTxt
+    ? (location.href = `/search/${searchTxt}`)
+    : console.error("Search box is Empty");
+});
+
+document.getElementsByName("answerRemove").forEach((removeBtns) => {
+  removeBtns.addEventListener("click", (e) => {
+    fetch(`/answer/delete?ansid=${e.target.dataset.ansid}`, {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8", // Indicates the content
+      },
+    })
+      .then((data) => {
+        if (data.ok && data.status === 204) {
+          swal({
+            title: "Removed",
+            text: "Answer is Successfully Removed",
+            icon: "success",
+          }).then(() => window.location.reload()); 
+        }
+
+      })
+      .catch((err) => console.error(err));
+  });
 });

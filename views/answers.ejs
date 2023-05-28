@@ -1,11 +1,12 @@
 <%- include('./partials/header.ejs') %>
-<div class="card">
+<div class="card" style="box-shadow: 0 10px 16px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19)">
   <div class="card-header">
     <span class="text-secondary"> At </span> <span class="text-indigo-400"><%= moment(new Date(main_question.dt)).format('D MMMM YY h:m A'); %></span><span class="text-secondary"> By </span><span class="text-indigo-400 me-3"><%-main_question.uname%></span>  <span class="text-danger"><%-main_question.views%> Views</span>
     
     <%if(session.login==true){%>
       <span><%if(session.uname === main_question.uname){%>
-        <span class="btn text-danger" name="deletePost" data-uname=<%-main_question.uname%> data-qid=<%-main_question._id.toString()%>>Remove</span>
+        <span class="text-danger mx-2" name="deletePost" style="cursor: pointer;" data-uname=<%-main_question.uname%> data-qid=<%-main_question._id.toString()%>>Remove</span>
+        <a href="/question/update/<%-main_question._id.toString()%>" class="text-success me-2" style="text-decoration: none;">Edit</a>
       <%}%></span>
       <%}%>
       
@@ -23,9 +24,10 @@
       <hr>
       <%}else{%>
         <%answers.forEach((item)=>{%>
-          <div class="card mt-2">
+          <div class="card mt-2" style="box-shadow: 0 10px 16px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19)">
               <div class="card-header text-indigo-400">
                  <%-item.posted_by%> <%if(session.login){ if(item.posted_by === session.uname){%><span class="text-success">Me</span><%} }%> <span class="text-secondary">At</span> <%= moment(new Date(item.dt)).format('D MMMM YY h:m A'); %>
+                 <%if(session.login){ if(item.posted_by === session.uname){%><span class="text-danger ms-2" title="Delete This Answer" style="cursor: pointer;" name="answerRemove" data-ansid=<%-item._id.toString()%>>Remove</span><%} }%>
               </div>
               <div class="card-body">
                 <h5 class="card-text"><%-item.answers%></h5>

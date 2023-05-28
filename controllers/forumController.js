@@ -314,7 +314,48 @@ class forumController {
       await sch.ans.deleteMany({ question_id: qid });
       res.send({ responce: "True" });
     } catch (err) {
-      res.status(500);
+      res.sendStatus(500);
+    }
+  };
+
+  static updateQuestionPage = async (req, res) => {
+    try {
+      if (req.session.login) {
+        const { questionId } = req.params;
+        const catogories = await sch.cato.find();
+        const Question = await sch.ques.findById(questionId);
+        res.render("updateQuestion", {
+          current: req.url,
+          session: req.session,
+          catogories: catogories,
+          Question,
+          title: `Forum | Update Question - ${Question.question_title}`,
+        });
+      } else {
+        res.redirect(req.url);
+      }
+    } catch (err) {
+      res.sendStatus(500);
+    }
+  };
+
+  static updateQuestion = async(req, res) => {
+    try {
+      const { question_title, qid, question_body } = req.body;
+      const questionUpdate = await sch.ques.findByIdAndUpdate( qid, {question_title, question_body}, { new: true });
+      if(questionUpdate) res.redirect(`/catogories/${questionUpdate.question_type}/`);
+    } catch (err) {
+      res.sendStatus(500);
+    }
+  };
+
+  static deleteAnswers = async (req, res) => {
+    try {
+      const ansId = req.query.ansid;
+      const ansRemovedResult = await sch.ans.findByIdAndDelete(ansId);
+      if (ansRemovedResult) res.sendStatus(204);
+    } catch (err) {
+      res.sendStatus(500);
     }
   };
 }

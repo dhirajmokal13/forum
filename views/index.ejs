@@ -41,7 +41,8 @@
               
               <%if(session.login==true){%>
                 <span><%if(session.uname === item.uname){%>
-                  <span class="btn text-danger" name="deletePost" data-uname=<%-item.uname%> data-qid=<%-item._id.toString()%>>Remove</span>
+                  <span class="text-danger ms-2" name="deletePost" style="cursor: pointer;" data-uname=<%-item.uname%> data-qid=<%-item._id.toString()%>>Remove</span>
+                  <a href="/question/update/<%-item._id.toString()%>" class="text-success ms-2" style="text-decoration: none;">Edit</a>
                 <%}%></span>
                 <%}%>
 
