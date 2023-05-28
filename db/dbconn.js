@@ -6,7 +6,7 @@ const conn = async (DATABASE_URL) => {
            useUnifiedTopology: true,
         };
         await Mongoose.connect(DATABASE_URL, DB_OPTIONS);
-        console.log("Connected Successfully");
+        console.log("Database Connected Successfully");
     } catch(err){
         console.log(err);
     }

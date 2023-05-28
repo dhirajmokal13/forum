@@ -1,0 +1,34 @@
+<%- include('./partials/header.ejs') %>
+<script>
+    const query = location.pathname.substring(location.pathname.indexOf('/search/') + '/search/'.length)
+    if(query) document.getElementById('serachBox').value = query;
+</script>
+<div class="container mt-5">
+    <%if(serachResult.length>0){%>
+        <%serachResult.forEach((item)=>{%>
+            <div class="card mb-3" style="box-shadow: 0 10px 16px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19)">
+              <div class="card-header">
+                  <span class="text-indigo-400"><%-item.uname%></span><span class="text-secondary">  At  </span> <span class="text-indigo-400 me-3"><%- moment(new Date(item.dt)).format('D MMMM YY h:m A'); %></span> <span class="text-danger"><%-item.views%> Views</span>
+                  
+                  <%if(session.login==true){%>
+                    <span><%if(session.uname === item.uname){%>
+                      <span class="btn text-danger" name="deletePost" data-uname=<%-item.uname%> data-qid=<%-item._id.toString()%>>Remove</span>
+                    <%}%></span>
+                    <%}%>
+    
+                </div>
+              <div class="card-body">
+                <h5 class="card-title"><%-item.question_title.slice(0,100)%>....</h5>
+                <p class="card-text"><%-item.question_body.slice(0,340)%>....</p>
+                </div>
+              <div class="card-footer text-body-secondary">
+                <a href="/forum/question/<%-item._id%>" class="btn btn-outline-royal me-2">Explore</a>
+                <span class="btn btn-outline-royal" name="likeBtn" data-login=<%-session.login || false%> data-qid=<%-item._id.toString()%>><%if(item.likes.includes("{ uname: '"+ session.uname +"' }")){%> Liked <%-item.likes.length%><%}else{%> Like <%-item.likes.length%><%}%></span>
+              </div>
+            </div>
+            <%})%>
+    <%}else{%>
+        <h3 class="text-danger">Result Not found</h3>
+    <%}%>
+</div>
+<%- include('./partials/footer.ejs') %>

@@ -1,0 +1,28 @@
+@import 'Colors.css';
+
+* {
+    font-family: 'IBM Plex Sans';
+}
+
+.btn-outline-royal {
+    color: var(--indigo-600);
+    border-color: var(--indigo-600);
+}
+
+.btn-outline-royal:hover {
+    color: #fff;
+    background-color: var(--indigo-700);
+}
+
+.btn-outline-teal-800 {
+    color: var(--teal-800);
+    border-color: var(--teal-800);
+}
+
+.btn-outline-teal-800:hover {
+    color: #fff;
+    background-color: var(--teal-800);
+}
+
+.text-royal {color: var(--indigo-800);}
+.text-indigo-400 {color: var(--indigo-400);}

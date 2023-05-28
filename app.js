@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+dotenv.config();
 import express from "express";
 import conn from "./db/dbconn.js";
 import {join} from 'path'
@@ -6,7 +8,7 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 const app = express();
 const port = process.env.PORT || "3000";
-const DATABASE_URL = "mongodb+srv://dhirajmokal13:dhiraj@cluster0.rae84.mongodb.net/forums?retryWrites=true&w=majority";
+const DATABASE_URL = process.env.DATABASE_URL_ONLINE;
 
 // database connection
 conn(DATABASE_URL);
@@ -34,14 +36,10 @@ app.use(session({
   secret:'iamkey',
   resave:false,
   saveUninitialized:true,
-  //cookie:{maxAge:10000}
   store: sessionStorage,
 }))
 
 // Load Routes
 app.use("/",web)
-//app.use("/catogories",web)
 
-app.listen(port, () => {
-  console.log(`server listening at http://localhost:${port}`);
-});
+app.listen(port, () => console.log(`server listening at http://127.0.0.1:${port}`));

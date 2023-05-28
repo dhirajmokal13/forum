@@ -1,7 +1,16 @@
 <%- include('./partials/header.ejs') %>
 <div class="card">
   <div class="card-header">
-    <span class="text-secondary"> At </span> <span class="text-primary"><%= moment(new Date(main_question.dt)).format('D MMMM YY h:m A'); %></span><span class="text-secondary"> By </span><span class="text-primary"><%-main_question.uname%></span>  <span class="text-danger"><%-main_question.views%> Views</span>
+    <span class="text-secondary"> At </span> <span class="text-indigo-400"><%= moment(new Date(main_question.dt)).format('D MMMM YY h:m A'); %></span><span class="text-secondary"> By </span><span class="text-indigo-400 me-3"><%-main_question.uname%></span>  <span class="text-danger"><%-main_question.views%> Views</span>
+    
+    <%if(session.login==true){%>
+      <span><%if(session.uname === main_question.uname){%>
+        <span class="btn text-danger" name="deletePost" data-uname=<%-main_question.uname%> data-qid=<%-main_question._id.toString()%>>Remove</span>
+      <%}%></span>
+      <%}%>
+      
+      <span class="btn btn-outline-royal" name="likeBtn" data-login=<%-session.login || false%> data-qid=<%-main_question._id.toString()%>><%if(main_question.likes.includes("{ uname: '"+ session.uname +"' }")){%> Liked <%-main_question.likes.length%><%}else{%> Like <%-main_question.likes.length%><%}%></span>
+
   </div>
     <div class="card-body">
       <h4 class="card-title"><%-main_question.question_title%></h4>
@@ -15,24 +24,37 @@
       <%}else{%>
         <%answers.forEach((item)=>{%>
           <div class="card mt-2">
-              <div class="card-header">
-                  <%= moment(new Date(item.dt)).format('D MMMM YY h:m A'); %> 
+              <div class="card-header text-indigo-400">
+                 <%-item.posted_by%> <%if(session.login){ if(item.posted_by === session.uname){%><span class="text-success">Me</span><%} }%> <span class="text-secondary">At</span> <%= moment(new Date(item.dt)).format('D MMMM YY h:m A'); %>
               </div>
               <div class="card-body">
-                  <p class="card-text"><%-item.posted_by%></p>
-                <h5 class="card-title"><%-item.answers%></h5>
+                <h5 class="card-text"><%-item.answers%></h5>
               </div>
             </div> 
       <%})%>
     <%}%>
   </div>
 
+  <%if(session.login){%>
+    <script src="https://cdn.tiny.cloud/1/<%-session.tinyApiKey%>/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+        selector: '#answers',
+        height: 230,
+        menubar: false,
+        plugins: 'preview fullscreen lists advlist code link help wordcount',
+        toolbar: 'undo redo | styles fontfamily fontsize | ' + 'forecolor preview  fullscreen | link code | numlist bullist | outdent indent | ' +'removeformat help',
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+      });
+    </script>
+<%}%>
+
   <div class="container">
     <%if(session.login == true){%>
     <div class="row g-3">
     <form action="/post/answers" method="post">
         <div class="mb-3 mt-5 col-auto">
-          <input type="text" name="answers" class="form-control" id="answers" placeholder="Please type answer here" required/>
+          <textarea type="text" name="answers" class="form-control" id="answers" placeholder="Please type answer here"></textarea>
         </div>
         <input type="hidden" name="current_page" value=<%-current%>>
         <input type="hidden" name="id" value=<%-id%>>

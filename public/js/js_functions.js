@@ -5,8 +5,15 @@ function replace_special_chars(txt){
     return ram;
 }
 
+const removeScriptTags = text => {
+    text = text.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
+    text = text.replace(/<\/script>/gi, '');
+    return text;
+}
+  
 const js_functions = {
     replace_special_chars,
+    removeScriptTags
 }
 
 export default js_functions

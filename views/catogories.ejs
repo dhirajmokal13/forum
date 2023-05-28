@@ -1,10 +1,24 @@
 <%- include('./partials/header.ejs') %>
     <!--<%-current%>-->
     <div class="container my-3">
+        <%if(session.login){%>
+            <script src="https://cdn.tiny.cloud/1/<%-session.tinyApiKey%>/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+            <script>
+                tinymce.init({
+                selector: '#question_body',
+                height: 230,
+                menubar: false,
+                plugins: 'preview fullscreen lists advlist code link help wordcount',
+                toolbar: 'undo redo | styles fontfamily fontsize | ' +'forecolor preview  fullscreen | link code | numlist bullist | outdent indent | ' +'removeformat help',
+                content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+              });
+            </script>
+        <%}%>
+
         <%if(all == true){%>
          <%q_no=0%>
             <%catogories.forEach((item)=>{%>
-                <div class="card my-3 text-center">
+                <div class="card my-3 text-center" style="box-shadow: 0 10px 16px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19)">
                     <div class="card-header">
                         Catogories
                     </div>
@@ -15,7 +29,7 @@
                         <p class="card-text">
                             <%-item.info%>
                         </p>
-                        <a href=<%-`/catogories/${item.cat_name}/`%> class="btn btn-outline-success">Explore
+                        <a href=<%-`/catogories/${item.cat_name}/`%> class="btn btn-outline-royal">Explore
                             <%-item.cat_name%></a>
                     </div>
                     <div class="card-footer text-muted">
@@ -25,24 +39,35 @@
                 </div>
             <%})%>
         <%}else{%>
-            <h2 class="mb-3"><%-cat_name%></h2>
+            <h2 class="mb-3" style="color: rgb(111, 66, 193)"><%-cat_name%></h2>
             <!-- forum questios start here -->
             <div class="my-4">
                 <%forum_questions.forEach((item)=>{%>
-                    <div class="card mb-3">
+                    <div class="card mb-3" style="box-shadow: 0 10px 16px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19)">
                         <div class="card-header">
-                            <span class="text-primary"><%-item.uname%></span><span class="text-secondary">  At  </span> <span class="text-primary"><%- moment(new Date(item.dt)).format('D MMMM YY h:m A'); %></span> <span class="text-danger"><%-item.views%> Views</span>
+                            <span class="text-indigo-400"><%-item.uname%></span><span class="text-secondary">  At  </span> <span class="text-indigo-400 me-3"><%- moment(new Date(item.dt)).format('D MMMM YY h:m A'); %></span> <span class="text-danger"><%-item.views%> Views</span>
+
+                            <%if(session.login==true){%>
+                                <span><%if(session.uname === item.uname){%>
+                                  <span class="btn text-danger" name="deletePost" data-uname=<%-item.uname%> data-qid=<%-item._id.toString()%>>Remove</span>
+                                <%}%></span>
+                                <%}%>
+
                           </div>
                         <div class="card-body">
                           <h5 class="card-title"><%-item.question_title.slice(0,100)%>....</h5>
                           <p class="card-text"><%-item.question_body.slice(0,340)%>....</p>
-                          <a href="/forum/question/<%-item._id%>" class="btn btn-outline-success">Explore</a>
+                        </div>
+                        <div class="card-footer text-body-secondary">
+                            <a href="/forum/question/<%-item._id%>" class="btn btn-outline-royal me-2">Explore</a>
+                            <span class="btn btn-outline-royal" name="likeBtn" data-login=<%-session.login || false%> data-qid=<%-item._id.toString()%>><%if(item.likes.includes("{ uname: '"+ session.uname +"' }")){%> Liked <%-item.likes.length%><%}else{%> Like <%-item.likes.length%><%}%></span>
                         </div>
                       </div>
                  <%})%>
             </div>
             <!-- forum questions end here -->
-            <h4 class="mt-4 mb-2">Post Questions</h4>
+            <hr/>
+            <h4 class="mt-6 mb-2" style="color: rgb(111, 66, 193)">Post Questions</h4>
             <%if(session.login == true){%>
                 <form action=<%-current%> method="post">
                     <div class="mb-3">
@@ -59,7 +84,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="question_body" class="form-label">Question</label>
-                        <textarea class="form-control" id="question_body" name="question_body" rows="3" required/></textarea>
+                        <textarea class="form-control" id="question_body" name="question_body" rows="3" placeholder="Enter Question Here"></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                   </form>

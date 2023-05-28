@@ -30,7 +30,7 @@ const queSchema = new Mongoose.Schema({
   question_type: { type: String, required: true, trim: true },
   uname: { type: String, required: true, trim: true },
   views: { type: Number },
-  likes: { type: Number },
+  likes: [{ type: Mongoose.Schema.Types.ObjectId, ref: "account", unique: false}],
   dt: { type: Date, default: Date.now },
 });
 
@@ -43,8 +43,8 @@ const ansSchema = new Mongoose.Schema({
 
 const userSchema = new Mongoose.Schema({
   ip: { type: String, required: true, trim: true },
-  post_id: { type: String, required: true, trim: true},
-  expire_at: {type: Date, default: Date.now, expires: 3600},
+  post_id: { type: String, required: true, trim: true },
+  expire_at: { type: Date, default: Date.now, expires: 3600 },
   // This will Expire after 1 houre
 });
 
