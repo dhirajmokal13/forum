@@ -45,9 +45,19 @@
                   <li><a class="dropdown-item" href="/catogories/">Show More</a></li>
             </ul>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="javascript:void(0)">About</a>
+          
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Chatroom
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <%catogories.forEach((item)=>{%>
+                <li><a class="dropdown-item" href=<%-`/chatroom/${item.cat_name}/>${item.cat_name}`%></a></li>
+              <%})%>
+            </ul>
           </li>
+          
           <li class="nav-item">
             <a href="#contact" class="nav-link">Contact</a>
           </li>
@@ -144,7 +154,7 @@
                 <input type="password" class="form-control" name="lpass" autocomplete="current-password" id="lpass" required />
               </div>
               <input type="hidden" name="current_page" value=<%-current%>>
-              <button type="submit" class="btn btn-outline-primary">Submit</button>
+              <button type="submit" class="btn btn-outline-primary">Login</button>
             </form>
           </div>
           <div class="modal-footer">

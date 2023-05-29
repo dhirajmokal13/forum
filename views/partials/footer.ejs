@@ -3,7 +3,7 @@
     <form id="contact">
         <div class="mb-3">
             <label for="cname" class="form-label">Name</label>
-            <input type="text" class="form-control" id="cname" name="cname" autocomplete="name" aria-describedby="cnameHelp" required />
+            <input type="text" class="form-control" id="cname" pattern="[A-Za-z\s]+" name="cname" autocomplete="name" aria-describedby="cnameHelp" required />
         </div>
         <div class="mb-3">
             <label for="cemail" class="form-label">Email id</label>
@@ -11,7 +11,7 @@
         </div>
         <div class="mb-3">
             <label for="ccomment" class="form-label">Comment</label>
-            <textarea class="form-control" autocomplete="off" id="ccomment" name="ccomment" rows="3" required></textarea>
+            <textarea class="form-control" pattern=".{20,}" autocomplete="off" id="ccomment" name="ccomment" rows="3" required></textarea>
         </div>
         <button type="submit" class="btn btn-outline-primary" id="contact_form_submit">Submit</button>
         <button type="reset" class="btn btn-outline-primary">Reset</button>
@@ -25,11 +25,12 @@
         let cname = document.getElementById("cname").value;
         let cemail = document.getElementById("cemail").value;
         let ccomment = document.getElementById("ccomment").value;
-        let mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-        let email_validate = cemail.match(mailformat)
-        if (cname == "" || cemail == "" || email_validate == null) {
-            swal("Error", "Please Check the data", "error");
-        } else {
+        const mailformat = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const nameFormat = /^[A-Za-z\s]+$/;
+        const commentFormat = /^.{20,}$/;
+        const errorMsg = msg => swal("Error", msg, "error");
+
+        if (cemail.match(mailformat) && cname.match(nameFormat) && ccomment.match(commentFormat)) {
             let xhr2 = new XMLHttpRequest();
             xhr2.open("POST", "/contact_form", true);
             xhr2.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -43,6 +44,9 @@
             }
             let cont_data = "cname=" + cname + "&" + "cemail=" + cemail + "&" + "ccomment=" + ccomment;
             xhr2.send(cont_data);
+        } else {
+            !cname.match(nameFormat) ? errorMsg("Please Chcek The name") : !cemail.match(mailformat) ? errorMsg("Please Check the email") : errorMsg("Please Check the comment, Atleast 20 characters long")
+            //swal("Error", "Please Check the data", "error");
         }
     })
 </script>
