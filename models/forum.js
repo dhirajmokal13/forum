@@ -4,6 +4,7 @@ import Mongoose from "mongoose";
 const signupSchema = new Mongoose.Schema({
   name: { type: String, required: true, trim: true },
   mnumber: { type: Number, required: true, trim: true },
+  email: {type: String, required: true, trim: true, unique: true },
   addr: { type: String, required: true, trim: true },
   dob: { type: Date, required: true, trim: true },
   uname: { type: String, required: true, trim: true, unique: true },
@@ -48,6 +49,13 @@ const userSchema = new Mongoose.Schema({
   // This will Expire after 1 houre
 });
 
+const otpSchema = new Mongoose.Schema({
+  otp: {type: Number, required: true},
+  user: {type:Mongoose.Schema.Types.ObjectId, ref: "account"},
+  expire_at: { type: Date, default: Date.now, expires: 300 },
+  // Otp will expire in 5 minutes
+})
+
 const sch = {
   signup: Mongoose.model("account", signupSchema),
   cont: Mongoose.model("contact", contSchema),
@@ -55,5 +63,7 @@ const sch = {
   ques: Mongoose.model("forum_question", queSchema),
   ans: Mongoose.model("forum_answer", ansSchema),
   user: Mongoose.model("users_ip", userSchema),
+  otp: Mongoose.model("otp", otpSchema)
 };
+
 export default sch;

@@ -20,6 +20,7 @@ const getSignupData = () => {
   return {
     name: document.getElementById("sname"),
     mobile: document.getElementById("smnumber"),
+    email: document.getElementById("semail"),
     address: document.getElementById("saddr"),
     dob: document.getElementById("sdob"),
     uname: document.getElementById("suname"),

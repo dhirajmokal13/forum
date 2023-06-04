@@ -4,8 +4,19 @@ import sch from "../models/forum.js";
 import bcrypt from "bcrypt";
 import moment from "moment";
 import js_functions from "../public/js/js_functions.js";
+import sendMail from "../middlewares/sendMail.js";
 
 class forumController {
+
+  static  generateOTP = () => {
+    var digits = '0123456789';
+    let OTP = '';
+    for (let i = 0; i < 6; i++ ) {
+        OTP += digits[Math.floor(Math.random() * 10)];
+    }
+    return OTP;
+}
+  
   // contact form start
   static contactform = async (req, res) => {
     try {
@@ -28,16 +39,18 @@ class forumController {
   static login = async (req, res) => {
     try {
       const { luname, lpass, current_page } = req.body;
-      const result = await sch.signup.findOne({ uname: luname });
+      const result = await sch.signup.findOne({
+        $or: [{ uname: luname }, { email: luname }],
+      });
       if (result != null) {
         const ismatch = await bcrypt.compare(lpass, result.password);
-        if (result.uname == luname && ismatch) {
+        if ((result.uname == luname || result.email === luname) && ismatch) {
           const questionCount = await sch.ques.find({ uname: luname }).count();
           const answerContributions = await sch.ans
             .find({ posted_by: luname })
             .count();
           req.session.login = true;
-          req.session.uname = luname;
+          req.session.uname = result.uname;
           req.session.uid = result._id.toString();
           req.session.tinyApiKey = process.env.TINYMCE_API_KEY;
           req.session.name = result.name;
@@ -62,24 +75,94 @@ class forumController {
   //Signup form start here
   static createAcc = async (req, res, next) => {
     try {
-      const { sname, smnumber, saddr, sdob, suname, spassword, current_page } =
-        req.body;
+      const {
+        sname,
+        smnumber,
+        semail,
+        saddr,
+        sdob,
+        suname,
+        spassword,
+        current_page,
+      } = req.body;
       const hashpwd = await bcrypt.hash(spassword, 10);
       const doc = new sch.signup({
         name: js_functions.replace_special_chars(sname),
         mnumber: smnumber,
+        email: semail,
         addr: js_functions.replace_special_chars(saddr),
         dob: sdob,
         uname: js_functions.replace_special_chars(suname),
         password: hashpwd,
       });
       const result = await doc.save();
-      res.redirect(current_page);
+      const mail = await sendMail(
+        semail,
+        "Account Created",
+        `Congratulations ${sname} Your Account is Created Successfully`
+      );
+      Promise.all([result, mail]).then(() => {
+        res.redirect(current_page);
+      });
     } catch (err) {
       console.log(err);
     }
     //Signup form end here
   };
+
+  static forgetPasswordPage = async (req, res) => {
+    try {
+      const catogories = await sch.cato.find();
+      res.render("forgetPassword", {
+        current: req.url,
+        session: req.session,
+        catogories: catogories,
+        title: "Forum | Forget Password",
+      });
+    } catch (err) {
+      res.sendStatus(500);
+    }
+  };
+
+  static forgetPasswordGenerate = async(req, res) => {
+    try {
+      const identity = req.body.uname;
+      const userFound = await sch.signup.findOne({ $or: [{ uname: identity }, { email: identity }],});
+      if(userFound!=null){
+          const otp = this.generateOTP();
+          const otpStored = await sch.otp({otp, user: userFound._id}).save();
+          const mailSend = await sendMail(userFound.email, "Forget Password otp", `Otp For forget password ${otp}`);
+          Promise.all([otpStored, mailSend]).then(()=>{
+            res.send({found: true, otpId: otpStored._id.toString()});
+          })
+      }else{
+        res.send({found: false});
+      }
+    } catch (err) {
+      res.sendStatus(500);
+    }
+  };
+
+  static forgetPasswordVerify = async(req, res) => {
+    try{
+      const { otpId, otp } = req.body;
+      const findOtpUsingId = await sch.otp.findOne({_id: otpId, otp});
+      findOtpUsingId != null ? res.status(200).send({ otpMatched: true, uid: findOtpUsingId.user.toString() }) : res.status(200).send({otpMatched: false});
+    }catch(err){
+      res.sendStatus(500);
+    }
+  }
+
+  static changePassword = async (req, res) => {
+    try {
+      const { uid, password } = req.body;
+      const hashpwd = await bcrypt.hash(password, 10);
+      const updatePwdResult = await sch.signup.findByIdAndUpdate(uid, { $set:{ password: hashpwd } });
+      updatePwdResult ? res.send({updated: true}) : res.send({updated: false});
+    } catch(err) {
+      res.sendStatus(500);
+    }
+  }
 
   static logout = (req, res) => {
     req.session.destroy();
@@ -131,7 +214,6 @@ class forumController {
         title: "Forum | Search",
       });
     } catch (err) {
-      console.log(err);
       res.sendStatus(500);
     }
   };
@@ -218,6 +300,18 @@ class forumController {
       res.send(found);
     } catch (err) {
       res.send(err);
+    }
+  };
+
+  static checkEmail = async (req, res) => {
+    try {
+      const { email } = req.params;
+      const found = await sch.signup.findOne({ email });
+      found === null
+        ? res.status(200).send({ found: false })
+        : res.status(200).send({ found: true });
+    } catch (err) {
+      res.sendStatus(500);
     }
   };
 
@@ -339,11 +433,16 @@ class forumController {
     }
   };
 
-  static updateQuestion = async(req, res) => {
+  static updateQuestion = async (req, res) => {
     try {
       const { question_title, qid, question_body } = req.body;
-      const questionUpdate = await sch.ques.findByIdAndUpdate( qid, {question_title, question_body}, { new: true });
-      if(questionUpdate) res.redirect(`/catogories/${questionUpdate.question_type}/`);
+      const questionUpdate = await sch.ques.findByIdAndUpdate(
+        qid,
+        { question_title, question_body },
+        { new: true }
+      );
+      if (questionUpdate)
+        res.redirect(`/catogories/${questionUpdate.question_type}/`);
     } catch (err) {
       res.sendStatus(500);
     }
