@@ -14,7 +14,7 @@ class forumController {
     for (let i = 0; i < 6; i++ ) {
         OTP += digits[Math.floor(Math.random() * 10)];
     }
-    return OTP;
+    return Number(OTP);
 }
   
   // contact form start
@@ -27,7 +27,6 @@ class forumController {
         comment: js_functions.replace_special_chars(ccomment),
       });
       const result = await doc.save();
-      //res.status(201).redirect(current_page);
       res.status(201).send(true);
     } catch (err) {
       res.status(404).send("Something went to Wrong");
@@ -75,16 +74,7 @@ class forumController {
   //Signup form start here
   static createAcc = async (req, res, next) => {
     try {
-      const {
-        sname,
-        smnumber,
-        semail,
-        saddr,
-        sdob,
-        suname,
-        spassword,
-        current_page,
-      } = req.body;
+      const { sname, smnumber, semail, saddr, sdob, suname, spassword, current_page, } = req.body;
       const hashpwd = await bcrypt.hash(spassword, 10);
       const doc = new sch.signup({
         name: js_functions.replace_special_chars(sname),
@@ -96,11 +86,7 @@ class forumController {
         password: hashpwd,
       });
       const result = await doc.save();
-      const mail = await sendMail(
-        semail,
-        "Account Created",
-        `Congratulations ${sname} Your Account is Created Successfully`
-      );
+      const mail = await sendMail(semail, "Account Created", `Congratulations ${sname} Your Account is Created Successfully`);
       Promise.all([result, mail]).then(() => {
         res.redirect(current_page);
       });
@@ -136,7 +122,7 @@ class forumController {
             res.send({found: true, otpId: otpStored._id.toString()});
           })
       }else{
-        res.send({found: false});
+        res.send({ found: false });
       }
     } catch (err) {
       res.sendStatus(500);
@@ -158,7 +144,7 @@ class forumController {
       const { uid, password } = req.body;
       const hashpwd = await bcrypt.hash(password, 10);
       const updatePwdResult = await sch.signup.findByIdAndUpdate(uid, { $set:{ password: hashpwd } });
-      updatePwdResult ? res.send({updated: true}) : res.send({updated: false});
+      updatePwdResult ? res.send({ updated: true }) : res.send({ updated: false });
     } catch(err) {
       res.sendStatus(500);
     }

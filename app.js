@@ -34,9 +34,9 @@ const sessionStorage = MongoStore.create({
 // Session
 app.use(session({
   name: 'forumsession',
-  secret:'iamkey',
-  resave:false,
-  saveUninitialized:true,
+  secret: 'iamkey',
+  resave: false,
+  saveUninitialized: true,
   store: sessionStorage,
 }))
 
