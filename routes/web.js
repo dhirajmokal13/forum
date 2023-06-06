@@ -1,6 +1,8 @@
 import express from 'express';
 const router = express.Router();
 import forumController from "../controllers/forumController.js";
+import loginCheck from '../middlewares/loginCheck.js';
+
 router.get('/', forumController.getAllDoc);
 router.post('/login', forumController.login);
 router.post('/create-acc', forumController.createAcc);
@@ -23,5 +25,6 @@ router.patch('/api/likes',forumController.manageLikes);
 router.get('/search/:searchTxt', forumController.search);
 router.get('/question/update/:questionId', forumController.updateQuestionPage);
 router.post('/question/update/', forumController.updateQuestion);
+router.get('/chatroom/:roomtype', loginCheck, forumController.chatRoom);
 router.all('*', forumController.notfound);
 export default router;

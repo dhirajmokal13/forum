@@ -443,6 +443,22 @@ class forumController {
       res.sendStatus(500);
     }
   };
+
+  static chatRoom = async (req, res) => {
+    try {
+      const { roomtype } = req.params;
+      const catogories = await sch.cato.find();
+      res.render("chatroom", {
+        current: req.url,
+        session: req.session,
+        catogories: catogories,
+        roomtype: roomtype.replace(/-/g,' ').toUpperCase(),
+        title: `Forum | Chatroom-${roomtype}`,
+      });
+    }catch(err){
+      res.sendStatus(500);
+    }
+  }
 }
 
 export default forumController;

@@ -46,13 +46,27 @@
             </ul>
           </li>
 
+          <!-- chat types -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Chatroom
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <%catogories.forEach((item)=>{%>
+                <li><a class="dropdown-item" href=<%-`/chatroom/${item.cat_name}/>${item.cat_name}`%></a></li>
+                <%})%>
+            </ul>
+          </li>
+          <!-- chat types -->
+
           <li class="nav-item">
             <a href="#contact" class="nav-link">Contact</a>
           </li>
         </ul>
-        <div class="d-flex">
-          <input class="form-control me-2" type="search" placeholder="Search" id="serachBox" aria-label="Search">
-          <button class="btn btn-outline-success me-2" id="searchBtn" data-bs-toggle="popover" title="Alert" data-bs-content="Sorry This Feature is currently unavailable" type="submit">Search</button>
+        <div class="d-flex input-group" style="width: 40vh;">
+          <input class="form-control" type="search" placeholder="Search" id="serachBox" aria-label="Search">
+          <button class="btn btn-outline-royal me-2" id="searchBtn" data-bs-toggle="popover" title="Alert" data-bs-content="Sorry This Feature is currently unavailable" type="submit">Search</button>
         </div>
 
         <%if(session.login==true){%>

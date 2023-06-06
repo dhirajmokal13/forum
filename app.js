@@ -1,12 +1,18 @@
 import dotenv from "dotenv";
 dotenv.config();
 import express from "express";
+import { Server } from "socket.io";
 import conn from "./db/dbconn.js";
 import {join} from 'path'
 import web from "./routes/web.js";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 const app = express();
+import http from 'http';
+import { chatCode } from "./controllers/chatControllers.js";
+const server = http.createServer(app);
+const io = new Server(server);
+chatCode(io);
 const port = process.env.PORT || "3000";
 const DATABASE_URL = process.env.DATABASE_URL_ONLINE;
 
@@ -43,4 +49,4 @@ app.use(session({
 // Load Routes
 app.use("/",web)
 
-app.listen(port, () => console.log(`server listening at http://127.0.0.1:${port}`));
+server.listen(port, () => console.log(`server listening at http://127.0.0.1:${port}`));
