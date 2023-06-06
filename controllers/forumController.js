@@ -29,10 +29,9 @@ class forumController {
       const result = await doc.save();
       res.status(201).send(true);
     } catch (err) {
-      res.status(404).send("Something went to Wrong");
+      res.sendStatus(500);
     }
   };
-  // contact form end
 
   //login start here
   static login = async (req, res) => {
@@ -66,10 +65,9 @@ class forumController {
         res.send("Username not found");
       }
     } catch (err) {
-      res.status(404).send("Something went to Wrong");
+      res.sendStatus(500);
     }
   };
-  //login end here
 
   //Signup form start here
   static createAcc = async (req, res, next) => {
@@ -93,7 +91,6 @@ class forumController {
     } catch (err) {
       console.log(err);
     }
-    //Signup form end here
   };
 
   static forgetPasswordPage = async (req, res) => {
@@ -173,11 +170,9 @@ class forumController {
         title: "Forum | Home",
       });
     } catch (error) {
-      console.log(error);
-      res.send(error);
+      res.sendStatus(500);
     }
   };
-  //Signup form data fetch start here
 
   static search = async (req, res) => {
     try {
@@ -225,10 +220,9 @@ class forumController {
         title: `Forum | All Categories`,
       });
     } catch (error) {
-      res.status(500).send("Something went to Wrong");
+      res.sendStatus(500);
     }
   };
-  //all catogories end here
 
   //single catogory start here
   static one_catogories = async (req, res) => {
@@ -250,7 +244,7 @@ class forumController {
         title: `Category | ${req.params.cat_name}`,
       });
     } catch (err) {
-      res.status(500).send("Something went to Wrong");
+      res.sendStatus(500);
     }
   };
 
@@ -269,7 +263,7 @@ class forumController {
       res.redirect(req.url);
     } catch (err) {
       console.log(err);
-      res.status(500).send("Something went to Wrong");
+      res.sendStatus(500);
     }
   };
 
@@ -285,7 +279,7 @@ class forumController {
       }
       res.send(found);
     } catch (err) {
-      res.send(err);
+      res.sendStatus(500);
     }
   };
 
@@ -318,7 +312,7 @@ class forumController {
         answers,
         title: `Answers | ${main_question.question_title}`,
       });
-      //start
+     
       let ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
       const check_user_view = await sch.user.findOne({
         ip: ip,
@@ -332,9 +326,8 @@ class forumController {
         const doc = new sch.user({ ip, post_id: req.params.id });
         const result = await doc.save();
       }
-      //end
     } catch (error) {
-      res.status(500).send("Something went to Wrong");
+      res.sendStatus(500);
     }
   };
 
@@ -379,7 +372,7 @@ class forumController {
       await doc.save();
       res.redirect(current_page);
     } catch (err) {
-      res.status(500).send("Something went to Wrong");
+      res.sendStatus(500);
     }
   };
 

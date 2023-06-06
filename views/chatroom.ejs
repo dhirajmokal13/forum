@@ -1,17 +1,21 @@
 <%- include('./partials/header.ejs') %>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.0/socket.io.min.js"></script>
+<script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
     <h2 class="text-center mt-3"><%-roomtype%> <span class="text-indigo-400 fs-5" id="chatroomType"></span></h2>
     <div class="container py-3" id="chatmain">
 
     </div>
     <hr>
-    <div class="container d-flex input-group" style="align-items: end; width: 60vh;">
-        <svg id="i-user" title="Active Users" class="me-4" color="green" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="36" height="40" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+    <div class="container d-flex input-group" style="align-items: end; width: 65vh;">
+        <svg id="i-user" title="Active Users" class="me-2" color="green" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="33" height="35" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
             <path d="M22 11 C22 16 19 20 16 20 13 20 10 16 10 11 10 6 12 3 16 3 20 3 22 6 22 11 Z M4 30 L28 30 C28 21 22 20 16 20 10 20 4 21 4 30 Z" />
-            <text x="25" y="10" color="purple"></text>
+            <text x="1" y="14" color="purple"></text>
         </svg>
         <input class="form-control" type="text" id="chatTxt" placeholder="Enter Chat here">
-        <button class="btn btn-outline-royal mt-1" style="min-width: 13vh;" type="submit" id="addText">Send</button>
+        <button class="btn btn-outline-royal mt-1" style="min-width: 13vh;" type="submit" id="addText">Send
+            <svg id="i-send" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="19" height="19" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                <path d="M2 16 L30 2 16 30 12 20 Z M30 2 L12 20" />
+            </svg>
+        </button>
     </div>
 
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -43,7 +47,7 @@
         }
 
         const cardBody = txt => {
-            return `<div class="card msg my-2"><div class="card-header text-royal">${txt.PostedBy} ${uname === txt.PostedBy ? "(<span class='text-success'>Me</span>)" : ""} At ${txt.time}</div><div class="card-body">${txt.Msg}</div></div>`;
+            return `<div class="card msg my-2"><div class="card-header text-royal">${txt.PostedBy} ${uname === txt.PostedBy ? "(<span class='text-success'>Me</span>)" : ""} At <span class="text-pink-500">${txt.time}</span></div><div class="card-body">${txt.Msg}</div></div>`;
         }
 
         const mainContainer = document.getElementById("chatmain");
