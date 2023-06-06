@@ -54,7 +54,6 @@
         const addDataToDom = data => mainContainer.innerHTML += data;
 
         socket.on('userConnected', data => {
-            console.log(activeUsers)
             addDataToDom(connectedAlert(data));
             document.getElementById("chatroomType").innerHTML = `(Active: <span class="text-success">${data.activeUsers}</span>)`;
             activeUsers.innerHTML = data.activeUsers;
