@@ -32,7 +32,7 @@
 
     <script>
         const uname = `<%-session.uname%>`;
-        const socket = io('/', { query: `uname=${uname}` });
+        const socket = io('/', { query: `uname=${uname}`, pingTimeout: 60000 });
 
         const connectedAlert = txt => {
             if (txt.uname === uname) {
