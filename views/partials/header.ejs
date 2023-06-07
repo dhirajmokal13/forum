@@ -70,10 +70,12 @@
         </ul>
         <div class="d-flex input-group" style="width: 40vh;">
           <input class="form-control" type="search" placeholder="Search" id="serachBox" aria-label="Search">
-          <button class="btn btn-outline-royal me-2" id="searchBtn" data-bs-toggle="popover" title="Alert" data-bs-content="Sorry This Feature is currently unavailable" type="submit">
-            <svg id="i-search" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="19" height="19" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+          <button class="btn btn-outline-royal me-2" id="searchBtn" data-bs-toggle="popover" title="Alert"
+            data-bs-content="Sorry This Feature is currently unavailable" type="submit">
+            <svg id="i-search" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="19" height="19" fill="none"
+              stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
               <circle cx="14" cy="14" r="12" />
-              <path d="M23 23 L30 30"  />
+              <path d="M23 23 L30 30" />
             </svg>
           </button>
         </div>
@@ -177,7 +179,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <form action="/login" method="post">
+            <form action="" method="post">
               <div class="mb-3 input-group">
                 <span class="input-group-text">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="22" height="22" fill="none"
@@ -203,7 +205,7 @@
               </div>
               <input type="hidden" name="current_page" value=<%-current%>>
               <hr>
-              <button type="submit" class="btn btn-outline-primary">Login</button>
+              <button type="submit" id="loginBtn" class="btn btn-outline-primary">Login</button>
               <a class="btn text-primary" href="/password/forget">Forget Password</a>
             </form>
           </div>
@@ -215,6 +217,38 @@
     </div>
     <!-- login modal end here -->
     <script>
+      const loginBtn = document.getElementById("loginBtn");
+      const lUname = document.getElementById("luname");
+      const lpass = document.getElementById('lpass');
+
+      loginBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (lUname.value.length >= 3 && lpass.value.length >= 3) {
+          loginBtn.innerHTML = `<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>Logging...`;
+          loginBtn.disabled = true;
+          fetch(`/user/login`, {
+            method: "POST",
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+            },
+            body: JSON.stringify({ luname: lUname.value, lpass: lpass.value }),
+          }).then(res => res.json())
+            .then(res => {
+              if (res.login) {
+                window.location.reload();
+              } else {
+                loginBtn.innerHTML = `Login`;
+                loginBtn.disabled = false;
+                swal({
+                  title: "Mismatch",
+                  text: "Invalid Credentials",
+                  icon: "error",
+                })
+              }
+            }).catch(err => console.error(err));
+        }
+      })
+
       let signup_btn = document.getElementById("signup-btn");
       let createacc = document.getElementById("createacc");
       signup_btn.addEventListener("click", () => {
@@ -278,10 +312,8 @@
         });
       });
 
-      const lpass = document.getElementById('lpass');
       const dPass = document.getElementById('dPass');
       dPass.addEventListener('click', () => {
-        console.log(dPass)
         if (lpass.type === 'password') {
           lpass.type = 'text';
           dPass.style.color = 'green';

@@ -36,7 +36,7 @@ class forumController {
   //login start here
   static login = async (req, res) => {
     try {
-      const { luname, lpass, current_page } = req.body;
+      const { luname, lpass } = req.body;
       const result = await sch.signup.findOne({
         $or: [{ uname: luname }, { email: luname }],
       });
@@ -57,9 +57,9 @@ class forumController {
             questions: questionCount,
             answers: answerContributions,
           };
-          res.redirect(current_page);
+          res.send({ login: true });
         } else {
-          res.send("Invalid credentials");
+          res.send({ login: false });
         }
       } else {
         res.send("Username not found");

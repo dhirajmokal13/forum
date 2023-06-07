@@ -4,7 +4,7 @@ import forumController from "../controllers/forumController.js";
 import loginCheck from '../middlewares/loginCheck.js';
 
 router.get('/', forumController.getAllDoc);
-router.post('/login', forumController.login);
+router.post('/user/login', forumController.login);
 router.post('/create-acc', forumController.createAcc);
 router.get('/password/forget', forumController.forgetPasswordPage);
 router.post('/password/forget/generate', forumController.forgetPasswordGenerate);
