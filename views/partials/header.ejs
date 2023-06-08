@@ -242,6 +242,7 @@
           }).then(res => res.json())
             .then(res => {
               if (res.login) {
+                loginBtn.innerHTML = `Login succeeded`;
                 window.location.reload();
               } else {
                 loginBtn.innerHTML = `Login`;

@@ -1,13 +1,11 @@
 <%- include('./partials/header.ejs') %>
   <!-- slides start here -->
   <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-inner">
+    <div class="carousel-inner" style="background: black; overflow: hidden;">
       <%let first_slide=true%>
         <%catogories.forEach((item)=>{%>
           <div class="carousel-item <%if(first_slide == true){%>active<%}%>">
-            <img
-              src="/images/<%-item.images%>"
-              class="d-block w-100" alt="...">
+            <img src="/images/<%-item.images%>" class="d-block w-100" loading="lazy" style="object-fit: cover; opacity: 0.4;" alt="Server Could Not Load Images">
             <div class="carousel-caption d-none d-md-block">
               <h5>
                 <a class="btn btn-success my-2" href="catogories/<%-item.cat_name%>/">Explore <%-item.cat_name%></a>
