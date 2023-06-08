@@ -62,7 +62,7 @@ class forumController {
           res.send({ login: false });
         }
       } else {
-        res.send("Username not found");
+        res.send({ login: false });
       }
     } catch (err) {
       res.sendStatus(500);
