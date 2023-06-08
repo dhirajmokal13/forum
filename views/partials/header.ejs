@@ -188,10 +188,16 @@
                       d="M22 11 C22 16 19 20 16 20 13 20 10 16 10 11 10 6 12 3 16 3 20 3 22 6 22 11 Z M4 30 L28 30 C28 21 22 20 16 20 10 20 4 21 4 30 Z" />
                   </svg>
                 </span>
-                <input type="text" class="form-control" placeholder="Enter Username or Email" name="luname" id="luname"
+                <input type="text" class="form-control" placeholder="Enter Username/Email" name="luname" id="luname"
                   autocomplete="username" aria-describedby="lunameHelp" required />
               </div>
               <div class="mb-3 input-group">
+                <span class="input-group-text">
+                  <svg id="i-lock" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="20" height="20" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                    <path d="M5 15 L5 30 27 30 27 15 Z M9 15 C9 9 9 5 16 5 23 5 23 9 23 15 M16 20 L16 23" />
+                    <circle cx="16" cy="24" r="1" />
+                  </svg>
+                </span>
                 <input type="password" class="form-control" placeholder="Enter Password" name="lpass"
                   autocomplete="current-password" id="lpass" required />
                 <span class="input-group-text" id="dPass">
@@ -203,9 +209,9 @@
                   </svg>
                 </span>
               </div>
-              <input type="hidden" name="current_page" value=<%-current%>>
+              <div class="login-validation invalid-feedback">Check Username/Password</div>
               <hr>
-              <button type="submit" id="loginBtn" class="btn btn-outline-primary">Login</button>
+              <button type="submit" id="loginBtn" class="btn btn-outline-royal">Login</button>
               <a class="btn text-primary" href="/password/forget">Forget Password</a>
             </form>
           </div>
@@ -223,7 +229,8 @@
 
       loginBtn.addEventListener("click", (e) => {
         e.preventDefault();
-        if (lUname.value.length >= 3 && lpass.value.length >= 3) {
+        if (lUname.value.length >= 3 && lpass.value.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)) {
+          document.getElementsByClassName('login-validation')[0].classList.remove('d-block');
           loginBtn.innerHTML = `<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>Logging...`;
           loginBtn.disabled = true;
           fetch(`/user/login`, {
@@ -246,6 +253,8 @@
                 })
               }
             }).catch(err => console.error(err));
+        } else {
+          document.getElementsByClassName('login-validation')[0].classList.add('d-block');
         }
       })
 
