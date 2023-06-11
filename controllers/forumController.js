@@ -26,7 +26,7 @@ class forumController {
         email: js_functions.replace_special_chars(cemail),
         comment: js_functions.replace_special_chars(ccomment),
       });
-      const result = await doc.save();
+      await doc.save();
       res.status(201).send(true);
     } catch (err) {
       res.sendStatus(500);
@@ -70,7 +70,7 @@ class forumController {
   };
 
   //Signup form start here
-  static createAcc = async (req, res, next) => {
+  static createAcc = async (req, res) => {
     try {
       const { sname, smnumber, semail, saddr, sdob, suname, spassword, current_page, } = req.body;
       const hashpwd = await bcrypt.hash(spassword, 10);
@@ -205,7 +205,6 @@ class forumController {
     try {
       const catogories = await sch.cato.find();
       for (let i = 0; i < catogories.length; i++) {
-        let cat = catogories[i].cat_name;
         let no_of_questions = await sch.ques
           .find({ question_type: catogories[i].cat_name })
           .count();
@@ -259,7 +258,7 @@ class forumController {
         uname: req.session.uname,
         views: 0,
       });
-      const result = await doc.save();
+      await doc.save();
       res.redirect(req.url);
     } catch (err) {
       console.log(err);
@@ -324,7 +323,7 @@ class forumController {
           { $inc: { views: 1 } }
         );
         const doc = new sch.user({ ip, post_id: req.params.id });
-        const result = await doc.save();
+        await doc.save();
       }
     } catch (error) {
       res.sendStatus(500);
@@ -382,7 +381,7 @@ class forumController {
 
   static deleteQuestion = async (req, res) => {
     try {
-      const { qid, uname } = req.query;
+      const { qid } = req.query;
       await sch.ques.findByIdAndDelete(qid);
       await sch.ans.deleteMany({ question_id: qid });
       res.send({ responce: "True" });

@@ -24,7 +24,6 @@ otpGenerateBtn.addEventListener("click", () => {
           );
           otpGenerateBtn.innerHTML = "Otp Generated Successfully";
           uname.classList.add("is-valid");
-          otp.disabled = false;
           otpValidateteBtn.disabled = false;
 
           otpValidateteBtn.addEventListener("click", () => {

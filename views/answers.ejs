@@ -5,8 +5,16 @@
     
     <%if(session.login==true){%>
       <span><%if(session.uname === main_question.uname){%>
-        <span class="text-danger mx-2" name="deletePost" style="cursor: pointer;" data-uname=<%-main_question.uname%> data-qid=<%-main_question._id.toString()%>>Remove</span>
-        <a href="/question/update/<%-main_question._id.toString()%>" class="text-success me-2" style="text-decoration: none;">Edit</a>
+        <span class="text-danger mx-3" name="deletePost" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove Post" style="cursor: pointer;" data-uname=<%-main_question.uname%> data-qid=<%-main_question._id.toString()%>>
+          <svg id="i-trash" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="19" height="19" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+            <path d="M28 6 L6 6 8 30 24 30 26 6 4 6 M16 12 L16 24 M21 12 L20 24 M11 12 L12 24 M12 6 L13 2 19 2 20 6" />
+          </svg>
+        </span>
+        <a href="/question/update/<%-main_question._id.toString()%>" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Post" class="text-success me-3" style="text-decoration: none;">
+          <svg id="i-edit" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="19" height="19" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+            <path d="M30 7 L25 2 5 22 3 29 10 27 Z M21 6 L26 11 Z M5 22 L10 27 Z" />
+          </svg>
+        </a>
       <%}%></span>
       <%}%>
       
@@ -27,7 +35,11 @@
           <div class="card mt-2" style="box-shadow: 0 10px 16px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19)">
               <div class="card-header text-indigo-400">
                  <%-item.posted_by%> <%if(session.login){ if(item.posted_by === session.uname){%><span class="text-success">Me</span><%} }%> <span class="text-secondary">At</span> <%= moment(new Date(item.dt)).format('D MMMM YY h:m A'); %>
-                 <%if(session.login){ if(item.posted_by === session.uname){%><span class="text-danger ms-2" title="Delete This Answer" style="cursor: pointer;" name="answerRemove" data-ansid=<%-item._id.toString()%>>Remove</span><%} }%>
+                 <%if(session.login){ if(item.posted_by === session.uname){%><span class="text-danger ms-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove This Reply" style="cursor: pointer;" name="answerRemove" data-ansid=<%-item._id.toString()%>>
+                  <svg id="i-trash" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="19" height="19" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                    <path d="M28 6 L6 6 8 30 24 30 26 6 4 6 M16 12 L16 24 M21 12 L20 24 M11 12 L12 24 M12 6 L13 2 19 2 20 6" />
+                  </svg>
+                </span><%} }%>
               </div>
               <div class="card-body">
                 <h5 class="card-text"><%-item.answers%></h5>
