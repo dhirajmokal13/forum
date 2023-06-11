@@ -56,9 +56,9 @@ document.getElementsByName("likeBtn").forEach((datas) => {
 });
 
 document.getElementById("searchBtn").addEventListener("click", () => {
-  const searchTxt = document.getElementById("serachBox").value;
-  searchTxt
-    ? (location.href = `/search/${searchTxt}`)
+  const searchTxt = document.getElementById("serachBox");
+  searchTxt.value
+    ? (location.href = `/search/${searchTxt.value}`)
     : console.error("Search box is Empty");
 });
 

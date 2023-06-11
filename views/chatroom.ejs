@@ -45,14 +45,14 @@
 
         const connectedAlert = txt => {
             if (txt.uname === uname) {
-                return `<div class="alert alert-success d-flex align-items-center msg my-2" role="alert"> <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg><div>You are connected to <strong>${txt.roomType}</strong></div></div>`;
+                return `<div class="alert alert-success d-flex align-items-center msg my-2 shadow rounded" role="alert"> <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg><div>You are connected to <strong>${txt.roomType}</strong></div></div>`;
             } else {
-                return `<div class="alert alert-success d-flex align-items-center msg my-2" role="alert"> <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg><div><strong>${txt.uname}</strong> is Connected.</div></div>`;
+                return `<div class="alert alert-success d-flex align-items-center msg my-2 shadow rounded" role="alert"> <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg><div><strong>${txt.uname}</strong> is Connected.</div></div>`;
             }
         }
 
         const cardBody = txt => {
-            return `<div class="card msg my-2"><div class="card-header text-royal">${txt.PostedBy} ${uname === txt.PostedBy ? "<span class='mx-1 badge bg-success'>Me</span>" : ""} At <span class="text-pink-500">${txt.time}</span></div><div class="card-body">${txt.Msg}</div></div>`;
+            return `<div class="card msg my-2 shadow bg-body rounded"><div class="card-header text-royal">${txt.PostedBy} ${uname === txt.PostedBy ? "<span class='mx-1 badge bg-success'>Me</span>" : ""} At <span class="text-pink-500">${txt.time}</span></div><div class="card-body">${txt.Msg}</div></div>`;
         }
 
         const mainContainer = document.getElementById("chatmain");
@@ -70,7 +70,7 @@
         });
 
         socket.on('userDisconnected', data => {
-            addDataToDom(`<div class="alert alert-danger d-flex align-items-center msg" role="alert"><svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg><div><strong>${data.uname}</strong> is Disconnected</div></div>`);
+            addDataToDom(`<div class="alert alert-danger d-flex align-items-center msg shadow rounded" role="alert"><svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg><div><strong>${data.uname}</strong> is Disconnected</div></div>`);
             document.getElementById("chatroomType").innerHTML = `(Active: <span class="text-success">${data.activeUsers}</span>)`;
             activeUsers.innerHTML = data.activeUsers;
             if (cards.length > 4) cards[cards.length - 4].scrollIntoView();
