@@ -43,7 +43,7 @@ document.getElementsByName("likeBtn").forEach((datas) => {
       fetch(`/api/likes?questionId=${e.target.dataset.qid}`, {
         method: "PATCH",
         headers: {
-          "Content-type": "application/json; charset=UTF-8", // Indicates the content
+          "Content-type": "application/json; charset=UTF-8",
         },
       })
         .then((data) => data.json())
@@ -67,7 +67,7 @@ document.getElementsByName("answerRemove").forEach((removeBtns) => {
     fetch(`/answer/delete?ansid=${e.target.dataset.ansid}`, {
       method: "DELETE",
       headers: {
-        "Content-type": "application/json; charset=UTF-8", // Indicates the content
+        "Content-type": "application/json; charset=UTF-8",
       },
     })
       .then((data) => {
@@ -90,7 +90,7 @@ var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
   return new bootstrap.Tooltip(tooltipTriggerEl)
 })
 
-//popover
+//Boostrap popover code
 var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
 var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
   return new bootstrap.Popover(popoverTriggerEl)
