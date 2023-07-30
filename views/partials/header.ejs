@@ -193,7 +193,8 @@
               </div>
               <div class="mb-3 input-group">
                 <span class="input-group-text">
-                  <svg id="i-lock" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="20" height="20" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                  <svg id="i-lock" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="20" height="20"
+                    fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                     <path d="M5 15 L5 30 27 30 27 15 Z M9 15 C9 9 9 5 16 5 23 5 23 9 23 15 M16 20 L16 23" />
                     <circle cx="16" cy="24" r="1" />
                   </svg>
@@ -340,7 +341,9 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">My Account</h5>
+              <h5 class="modal-title" id="exampleModalLabel">My Account <h6 class="text-royal modal-title ms-2">Last
+                  Login: <span class="text-secondary" id="loginActivityField">Loading...</span></h6>
+              </h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -350,7 +353,10 @@
               <hr />
               <h6><span class="text-secondary fs-6">Contributions: </span>Questions: <span
                   class="text-indigo-400"><%-session.contributions.questions%>, </span>Answers: <span
-                  class="text-indigo-400"><%-session.contributions.answers%></span></h6>
+                  class="text-indigo-400"><%-session.contributions.answers%></span>
+                <span class="text-secondary fs-6 ms-2">Login Activites: <a class="text-indigo-400"
+                    href="/user/login-activity" style="cursor: pointer">check</a></span>
+              </h6>
               <hr />
               <a id="logout" class="btn btn-outline-royal mt-3 d-md-block">Logout
                 <svg id="i-signout" class="ms-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="25"
@@ -367,6 +373,13 @@
         </div>
       </div>
       <script>
+        let loginActivityField = document.getElementById('loginActivityField');
+        fetch(`/user/last-login/<%-session.uid%>`).
+          then(async(res) => {
+            let data = await res.json();
+            loginActivityField.innerHTML = data.lst;
+          }).catch(err => console.error(err));
+
         let lougout = document.getElementById("logout");
         lougout.addEventListener("click", () => {
           swal({

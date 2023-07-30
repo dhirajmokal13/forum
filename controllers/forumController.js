@@ -5,18 +5,32 @@ import bcrypt from "bcrypt";
 import moment from "moment";
 import js_functions from "../public/js/js_functions.js";
 import sendMail from "../middlewares/sendMail.js";
+import addLoginLogs from "../middlewares/loginLogs.js";
 
 class forumController {
 
-  static  generateOTP = () => {
+  static lastLogin = async (req, res) => {
+    try {
+      const lstLgn = await sch.signup.findById(req.params.uid, { loginLogs: { $slice: ['$loginLogs', -1] }, });
+      //const responce = moment(lstLgn.loginLogs[0]).fromNow();
+      const loginDate = moment(lstLgn.loginLogs[0]);
+      const roundedDate = loginDate.startOf();
+      const response = roundedDate.fromNow();
+      res.status(200).send({ lst: response });
+    } catch (err) {
+      res.sendStatus(500);
+    }
+  }
+
+  static generateOTP = () => {
     var digits = '0123456789';
     let OTP = '';
-    for (let i = 0; i < 6; i++ ) {
-        OTP += digits[Math.floor(Math.random() * 10)];
+    for (let i = 0; i < 6; i++) {
+      OTP += digits[Math.floor(Math.random() * 10)];
     }
     return Number(OTP);
-}
-  
+  }
+
   // contact form start
   static contactform = async (req, res) => {
     try {
@@ -43,6 +57,7 @@ class forumController {
       if (result != null) {
         const ismatch = await bcrypt.compare(lpass, result.password);
         if ((result.uname == luname || result.email === luname) && ismatch) {
+          await addLoginLogs(result._id);
           const questionCount = await sch.ques.find({ uname: luname }).count();
           const answerContributions = await sch.ans
             .find({ posted_by: luname })
@@ -68,6 +83,24 @@ class forumController {
       res.sendStatus(500);
     }
   };
+
+  static loginLogsPage = async (req, res) => {
+    try {
+      const catogories = await sch.cato.find();
+      const logs = await sch.signup.findById(req.session.uid, 'loginLogs');
+      res.render("loginLogs", {
+        current: req.url,
+        session: req.session,
+        catogories: catogories,
+        logs: logs.loginLogs.reverse(),
+        moment,
+        title: `Forum | Login Logs - ${req.session.uname} (${req.session.name})`,
+      });
+    } catch (err) {
+      console.log(err)
+      res.sendStatus(500);
+    }
+  }
 
   //Signup form start here
   static createAcc = async (req, res) => {
@@ -107,18 +140,18 @@ class forumController {
     }
   };
 
-  static forgetPasswordGenerate = async(req, res) => {
+  static forgetPasswordGenerate = async (req, res) => {
     try {
       const identity = req.body.uname;
-      const userFound = await sch.signup.findOne({ $or: [{ uname: identity }, { email: identity }],});
-      if(userFound!=null){
-          const otp = this.generateOTP();
-          const otpStored = await sch.otp({otp, user: userFound._id}).save();
-          const mailSend = await sendMail(userFound.email, "Forget Password otp", `Otp For forget password ${otp}`);
-          Promise.all([otpStored, mailSend]).then(()=>{
-            res.send({found: true, otpId: otpStored._id.toString()});
-          })
-      }else{
+      const userFound = await sch.signup.findOne({ $or: [{ uname: identity }, { email: identity }], });
+      if (userFound != null) {
+        const otp = this.generateOTP();
+        const otpStored = await sch.otp({ otp, user: userFound._id }).save();
+        const mailSend = await sendMail(userFound.email, "Forget Password otp", `Otp For forget password ${otp}`);
+        Promise.all([otpStored, mailSend]).then(() => {
+          res.send({ found: true, otpId: otpStored._id.toString() });
+        })
+      } else {
         res.send({ found: false });
       }
     } catch (err) {
@@ -126,12 +159,12 @@ class forumController {
     }
   };
 
-  static forgetPasswordVerify = async(req, res) => {
-    try{
+  static forgetPasswordVerify = async (req, res) => {
+    try {
       const { otpId, otp } = req.body;
-      const findOtpUsingId = await sch.otp.findOne({_id: otpId, otp});
-      findOtpUsingId != null ? res.status(200).send({ otpMatched: true, uid: findOtpUsingId.user.toString() }) : res.status(200).send({otpMatched: false});
-    }catch(err){
+      const findOtpUsingId = await sch.otp.findOne({ _id: otpId, otp });
+      findOtpUsingId != null ? res.status(200).send({ otpMatched: true, uid: findOtpUsingId.user.toString() }) : res.status(200).send({ otpMatched: false });
+    } catch (err) {
       res.sendStatus(500);
     }
   }
@@ -140,9 +173,9 @@ class forumController {
     try {
       const { uid, password } = req.body;
       const hashpwd = await bcrypt.hash(password, 10);
-      const updatePwdResult = await sch.signup.findByIdAndUpdate(uid, { $set:{ password: hashpwd } });
+      const updatePwdResult = await sch.signup.findByIdAndUpdate(uid, { $set: { password: hashpwd } });
       updatePwdResult ? res.send({ updated: true }) : res.send({ updated: false });
-    } catch(err) {
+    } catch (err) {
       res.sendStatus(500);
     }
   }
@@ -311,7 +344,7 @@ class forumController {
         answers,
         title: `Answers | ${main_question.question_title}`,
       });
-     
+
       let ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
       const check_user_view = await sch.user.findOne({
         ip: ip,
@@ -444,10 +477,10 @@ class forumController {
         current: req.url,
         session: req.session,
         catogories: catogories,
-        roomtype: roomtype.replace(/-/g,' ').toUpperCase(),
+        roomtype: roomtype.replace(/-/g, ' ').toUpperCase(),
         title: `Forum | Chatroom-${roomtype}`,
       });
-    }catch(err){
+    } catch (err) {
       res.sendStatus(500);
     }
   }
