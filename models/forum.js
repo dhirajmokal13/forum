@@ -9,6 +9,7 @@ const signupSchema = new Mongoose.Schema({
   dob: { type: Date, required: true, trim: true },
   uname: { type: String, required: true, trim: true, unique: true },
   password: { type: String, required: true, trim: true },
+  loginLogs: [{ type: Date, unique: false }],
   dt: { type: Date, default: Date.now },
 });
 

@@ -1,0 +1,28 @@
+<%- include('./partials/header.ejs') %>
+<h3 class="text-center mt-3 text-indigo-400">Login Activities</h3>
+<style>
+  .table-container {
+    margin: 2rem 8vw 0 8vw;
+  }
+  table {
+    border: 1px solid;
+    width: auto;
+    max-width: inherit;
+    margin-left: 2rem;
+  }
+</style>
+<div class="table-container">
+  <table class="table table-striped table-hover">
+    <tr>
+      <th scope="col">Sr Number</th>
+      <th scope="col">Login Logs</th>
+    </tr>
+    <% logs.forEach((log, index) => { %>
+      <tr>
+        <th scope="row" class="text-indigo-400"><%- index + 1 %></th>
+        <td><%- moment(log).format('MMMM Do YYYY, h:mm:ss a') %></td>
+      </tr>
+    <% }) %>
+  </table>
+</div>
+<%- include('./partials/footer.ejs') %>

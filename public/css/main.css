@@ -4,6 +4,10 @@
     font-family: 'IBM Plex Sans';
 }
 
+body {
+    overflow-x: hidden;
+}
+
 .btn-outline-royal {
     color: var(--indigo-600);
     border-color: var(--indigo-600);

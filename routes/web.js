@@ -26,5 +26,7 @@ router.get('/search/:searchTxt', forumController.search);
 router.get('/question/update/:questionId', forumController.updateQuestionPage);
 router.post('/question/update/', forumController.updateQuestion);
 router.get('/chatroom/:roomtype', loginCheck, forumController.chatRoom);
+router.get('/user/last-login/:uid', forumController.lastLogin);
+router.get('/user/login-activity', loginCheck, forumController.loginLogsPage);
 router.all('*', forumController.notfound);
 export default router;
