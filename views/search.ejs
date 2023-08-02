@@ -31,8 +31,10 @@
                 <p class="card-text"><%-item.question_body.slice(0,340)%>....</p>
                 </div>
               <div class="card-footer text-body-secondary">
-                <a href="/forum/question/<%-item._id%>" class="btn btn-outline-royal me-2">Explore</a>
-                <span class="btn btn-outline-royal" name="likeBtn" data-login=<%-session.login || false%> data-qid=<%-item._id.toString()%>><%if(item.likes.includes("{ uname: '"+ session.uname +"' }")){%> Liked <%-item.likes.length%><%}else{%> Like <%-item.likes.length%><%}%></span>
+                <div class="btn-group">
+                  <a href="/forum/question/<%-item._id%>" class="btn btn-royal">Explore</a>
+                  <span class="btn btn-outline-royal" name="likeBtn" data-login=<%-session.login || false%> data-qid=<%-item._id.toString()%>><%if(item.likes.includes("{ uname: '"+ session.uname +"' }")){%> Liked <%-item.likes.length%><%} else {%> Like <%-item.likes.length%><%}%></span>
+                </div>
               </div>
             </div>
             <%})%>
