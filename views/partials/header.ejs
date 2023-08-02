@@ -89,19 +89,21 @@
             </svg>
           </button>
           <%}else{%>
-            <button type="button" class="btn btn-outline-teal-800" id="signup-btn" data-bs-toggle="modal"
+          <div class="btn-group" role="group">
+              <button type="button" class="btn btn-teal-800 px-3" data-bs-toggle="modal" data-bs-target="#login">
+                <svg id="i-signin" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="17" height="17"
+                  fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                  <path d="M3 16 L23 16 M15 8 L23 16 15 24 M21 4 L29 4 29 28 21 28" />
+                </svg>
+              </button>
+              <button type="button" class="btn btn-outline-teal-800 px-3" id="signup-btn" data-bs-toggle="modal"
               data-bs-target="#signup">
               <svg id="i-export" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="17" height="17"
                 fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                 <path d="M28 22 L28 30 4 30 4 22 M16 4 L16 24 M8 12 L16 4 24 12" />
               </svg>
             </button>
-            <button type="button" class="btn btn-outline-teal-800 ms-2" data-bs-toggle="modal" data-bs-target="#login">
-              <svg id="i-signin" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="17" height="17"
-                fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-                <path d="M3 16 L23 16 M15 8 L23 16 15 24 M21 4 L29 4 29 28 21 28" />
-              </svg>
-            </button>
+          </div>
             <%}%>
       </div>
     </div>
@@ -158,8 +160,10 @@
                   id="spassword" autocomplete="current-password" required />
               </div>
               <input type="hidden" name="current_page" value=<%-current%>>
-              <button type="submit" id="createacc" value="true" class="btn btn-primary" disabled>Submit</button>
-              <button type="reset" class="btn btn-primary" id="signup_reset">Reset</button>
+              <div class="btn-group">
+                <button type="submit" id="createacc" value="true" class="btn btn-primary" disabled>Submit</button>
+                <button type="reset" class="btn btn-primary" id="signup_reset">Reset</button>
+              </div>
             </form>
           </div>
           <div class="modal-footer">
@@ -210,7 +214,7 @@
                   </svg>
                 </span>
               </div>
-              <div class="login-validation invalid-feedback">Check Username/Password</div>
+              <div class="login-validation invalid-feedback" title="Invalid username or password">Check Username/Password</div>
               <hr>
               <button type="submit" id="loginBtn" class="btn btn-outline-royal">Login</button>
               <a class="btn text-primary" href="/password/forget">Forget Password</a>

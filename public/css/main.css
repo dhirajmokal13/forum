@@ -1,21 +1,22 @@
 @import 'Colors.css';
 
-* {
-    font-family: 'IBM Plex Sans';
-}
+* { font-family: 'IBM Plex Sans'; }
 
-body {
-    overflow-x: hidden;
-}
+body { overflow-x: hidden; }
 
 .btn-outline-royal {
     color: var(--indigo-600);
     border-color: var(--indigo-600);
 }
 
-.btn-outline-royal:hover {
+.btn-outline-royal:hover, .btn-royal {
     color: #fff;
     background-color: var(--indigo-700);
+}
+
+.btn-royal:hover { 
+    color: #fff; 
+    background-color: var(--indigo-800); 
 }
 
 .btn-outline-teal-800 {
@@ -23,10 +24,16 @@ body {
     border-color: var(--teal-800);
 }
 
-.btn-outline-teal-800:hover {
+.btn-outline-teal-800:hover, .btn-teal-800 {
     color: #fff;
     background-color: var(--teal-800);
 }
+
+.btn-teal-800:hover {
+    color: #fff;
+    background-color: var(--teal-900);
+}
+
 
 .text-royal {color: var(--indigo-800);}
 .text-indigo-400 {color: var(--indigo-400);}
