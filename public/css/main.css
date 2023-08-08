@@ -9,7 +9,7 @@ body { overflow-x: hidden; }
     border-color: var(--indigo-600);
 }
 
-.btn-outline-royal:hover, .btn-royal {
+.btn-royal {
     color: #fff;
     background-color: var(--indigo-700);
 }

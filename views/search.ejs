@@ -32,8 +32,8 @@
                 </div>
               <div class="card-footer text-body-secondary">
                 <div class="btn-group">
-                  <a href="/forum/question/<%-item._id%>" class="btn btn-royal">Explore</a>
-                  <span class="btn btn-outline-royal" name="likeBtn" data-login=<%-session.login || false%> data-qid=<%-item._id.toString()%>><%if(item.likes.includes("{ uname: '"+ session.uname +"' }")){%> Liked <%-item.likes.length%><%} else {%> Like <%-item.likes.length%><%}%></span>
+                  <a href="/forum/question/<%-item._id%>" name="exploreBtn" data-id="<%-item._id%>" class="btn btn-royal">Explore</a>
+                  <span class="btn btn-outline-royal" name="likeBtn" data-id="<%-item._id%>" data-login=<%-session.login || false%> data-qid=<%-item._id.toString()%>><%if(item.likes.includes("{ uname: '"+ session.uname +"' }")){%> Liked <%-item.likes.length%><%} else {%> Like <%-item.likes.length%><%}%></span>
                 </div>
               </div>
             </div>

@@ -76,7 +76,7 @@ document.getElementsByName("answerRemove").forEach((removeBtns) => {
             title: "Removed",
             text: "Answer is Successfully Removed",
             icon: "success",
-          }).then(() => window.location.reload()); 
+          }).then(() => window.location.reload());
         }
 
       })
@@ -94,4 +94,53 @@ var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
 var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
   return new bootstrap.Popover(popoverTriggerEl)
+})
+
+// Post Buttons styling
+document.getElementsByName("exploreBtn").forEach(data => {
+  data.addEventListener("mouseover", e => {
+    if (e.target.classList.contains("btn-royal")) {
+      document.getElementsByName("likeBtn").forEach(likeBtn => {
+        if (likeBtn.dataset.id === e.target.dataset.id) {
+          e.target.classList.replace("btn-royal", "btn-outline-royal");
+          likeBtn.classList.replace("btn-outline-royal", "btn-royal")
+        }
+      })
+    }
+  })
+
+  data.addEventListener("mouseout", e => {
+    if (e.target.classList.contains("btn-outline-royal")) {
+      document.getElementsByName("likeBtn").forEach(likeBtn => {
+        if (likeBtn.dataset.id === e.target.dataset.id) {
+          e.target.classList.replace("btn-outline-royal", "btn-royal");
+          likeBtn.classList.replace("btn-royal", "btn-outline-royal")
+        }
+      })
+    }
+  })
+})
+
+document.getElementsByName("likeBtn").forEach(data => {
+  data.addEventListener("mouseout", e => {
+    if (e.target.classList.contains("btn-royal")) {
+      document.getElementsByName("exploreBtn").forEach(likeBtn => {
+        if (likeBtn.dataset.id === e.target.dataset.id) {
+          e.target.classList.replace("btn-royal", "btn-outline-royal");
+          likeBtn.classList.replace("btn-outline-royal", "btn-royal")
+        }
+      })
+    }
+  })
+
+  data.addEventListener("mouseover", e => {
+    if (e.target.classList.contains("btn-outline-royal")) {
+      document.getElementsByName("exploreBtn").forEach(likeBtn => {
+        if (likeBtn.dataset.id === e.target.dataset.id) {
+          e.target.classList.replace("btn-outline-royal", "btn-royal");
+          likeBtn.classList.replace("btn-royal", "btn-outline-royal")
+        }
+      })
+    }
+  })
 })
