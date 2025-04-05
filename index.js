@@ -32,6 +32,7 @@ app.use(express.json());
 app.use('/', express.static(join(process.cwd(), "public")));
 
 //set template engine
+app.set("views", join(process.cwd(), "views"));
 app.set("view engine", "ejs");
 
 // Mongodb Session
