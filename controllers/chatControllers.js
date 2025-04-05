@@ -1,6 +1,6 @@
 export const chatCode = io => {
     //let uname = {};
-    const activeUsers = { 'programming': 0, 'cooking': 0, 'science-and-tech': 0, 'Politics': 0, 'Automobiles': 0 };
+    const activeUsers = { 'programming': 0, 'cooking': 0, 'science-and-tech': 0, 'Politics': 0, 'Automobiles': 0, 'Love-Relationships': 0 };
     io.on('connection', (socket) => {
         const roomType = new URL(socket.handshake.headers.referer).pathname.split('/')[2];
         activeUsers[roomType]++;

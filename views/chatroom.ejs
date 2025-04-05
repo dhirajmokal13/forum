@@ -81,11 +81,18 @@
             if (cards.length > 4) cards[cards.length - 4].scrollIntoView();
         })
 
-        addTextBtn.addEventListener("click", () => {
+        const sendMsg = () => {
             if ((chatTxtField.value).length > 0) {
                 socket.emit("sendMsg", { Msg: chatTxtField.value, PostedBy: uname, time: `${new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}` })
                 chatTxtField.value = "";
             }
-        })
+        }
+
+        addTextBtn.addEventListener("click", sendMsg());
+        chatTxtField.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                sendMsg();
+            }
+        });
     </script>
     <%- include('./partials/footer.ejs') %>
