@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use(express.json());
 
 //static files
-app.use('/', express.static(join(process.cwd(), "public")));
+app.use('/static', express.static(join(process.cwd(), "public")));
 
 //set template engine
 app.set("views", join(process.cwd(), "views"));

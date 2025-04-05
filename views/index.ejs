@@ -5,7 +5,7 @@
       <%let first_slide=true%>
         <%catogories.forEach((item)=>{%>
           <div class="carousel-item <%if(first_slide == true){%>active<%}%>">
-            <img src="/images/<%-item.images%>" class="d-block w-100" loading="lazy" style="object-fit: cover; opacity: 0.4;" alt="Server Could Not Load Images">
+            <img src="/static/images/<%-item.images%>" class="d-block w-100" loading="lazy" style="object-fit: cover; opacity: 0.4;" alt="Server Could Not Load Images">
             <div class="carousel-caption d-none d-md-block">
               <h5>
                 <a class="btn btn-success my-2" href="catogories/<%-item.cat_name%>/">Explore <%-item.cat_name%></a>
