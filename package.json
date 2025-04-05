@@ -2,10 +2,10 @@
   "name": "forum1",
   "version": "1.0.0",
   "description": "This is forum site for questions and answers",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
-    "dev": "nodemon app",
-    "start": "node app.js"
+    "dev": "nodemon index",
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "DhirajMokal",
