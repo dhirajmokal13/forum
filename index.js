@@ -10,6 +10,7 @@ import MongoStore from "connect-mongo";
 const app = express();
 import http from 'http';
 import { chatCode } from "./controllers/chatControllers.js";
+import path from 'path';
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
@@ -29,7 +30,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use(express.json());
 
 //static files
-app.use('/static', express.static(join(process.cwd(), "public")));
+app.use('/static', express.static(path.join(process.cwd(), 'public')));
 
 //set template engine
 app.set("views", join(process.cwd(), "views"));
