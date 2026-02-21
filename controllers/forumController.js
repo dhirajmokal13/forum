@@ -477,6 +477,7 @@ class forumController {
         current: req.url,
         session: req.session,
         catogories: catogories,
+        roomkey: roomtype,
         roomtype: roomtype.replace(/-/g, ' ').toUpperCase(),
         title: `Forum | Chatroom-${roomtype}`,
       });

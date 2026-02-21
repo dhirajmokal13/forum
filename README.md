@@ -7,6 +7,10 @@ A platform to ask questions and find answers on various categories. Connect with
 - Receive answers from experts and the community 
 - Build a strong community through discussion and problem solving 
 - Realtime Chatroom
+- Chat message history (recent messages on join)
+- Typing indicator in chatroom
+- Active user presence updates
+- Basic anti-spam message throttling
 - Forget Password
 - Total Contributions in Account Section
 - Rich Text Editor

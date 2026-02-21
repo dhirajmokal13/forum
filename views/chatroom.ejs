@@ -22,6 +22,9 @@
             </svg>
         </button>
     </div>
+    <div class="container" style="width: 65vh;">
+        <small id="typingIndicator" class="text-muted"></small>
+    </div>
 
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
         <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
@@ -40,59 +43,130 @@
     <hr>
 
     <script>
-        const uname = `<%-session.uname%>`;
-        const socket = io('/', { query: `uname=${uname}`, pingTimeout: 60000 });
+        const uname = `<%=session.uname%>`;
+        const roomType = `<%=roomkey%>`;
+        const socket = io('/', {
+            auth: { uname, roomType },
+            query: { uname, roomType },
+            pingTimeout: 60000,
+            reconnection: true,
+            reconnectionAttempts: 10,
+            reconnectionDelay: 500
+        });
 
         const connectedAlert = txt => {
             if (txt.uname === uname) {
-                return `<div class="alert alert-success d-flex align-items-center msg my-2 shadow rounded" role="alert"> <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg><div>You are connected to <strong>${txt.roomType}</strong></div></div>`;
+                return `<div class="alert alert-success d-flex align-items-center msg my-2 shadow rounded" role="alert"> <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg><div>You are connected to <strong>${txt.roomType || "chatroom"}</strong></div></div>`;
             } else {
-                return `<div class="alert alert-success d-flex align-items-center msg my-2 shadow rounded" role="alert"> <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg><div><strong>${txt.uname}</strong> is Connected.</div></div>`;
+                return `<div class="alert alert-success d-flex align-items-center msg my-2 shadow rounded" role="alert"> <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg><div><strong>${txt.uname || "Anonymous"}</strong> is Connected.</div></div>`;
             }
         }
 
         const cardBody = txt => {
-            return `<div class="card msg my-2 shadow bg-body rounded"><div class="card-header text-royal">${txt.PostedBy} ${uname === txt.PostedBy ? "<span class='mx-1 badge bg-success'>Me</span>" : ""} At <span class="text-pink-500">${txt.time}</span></div><div class="card-body">${txt.Msg}</div></div>`;
+            return `<div class="card msg my-2 shadow bg-body rounded"><div class="card-header text-royal">${txt.PostedBy || "Anonymous"} ${uname === txt.PostedBy ? "<span class='mx-1 badge bg-success'>Me</span>" : ""} At <span class="text-pink-500">${txt.time || ""}</span></div><div class="card-body">${txt.Msg || ""}</div></div>`;
         }
 
         const mainContainer = document.getElementById("chatmain");
         const addTextBtn = document.getElementById("addText");
         const chatTxtField = document.getElementById("chatTxt");
+        const typingIndicator = document.getElementById("typingIndicator");
+        const roomTypeHolder = document.getElementById("chatroomType");
         const cards = document.getElementsByClassName('msg');
         const activeUsers = document.getElementsByClassName('actusr')[0];
         const addDataToDom = data => mainContainer.innerHTML += data;
+        const updatePresence = ({ activeUsers: users = 0 }) => {
+            roomTypeHolder.innerHTML = `(Active: <span class="text-success">${users}</span>)`;
+            activeUsers.innerHTML = users;
+        };
+        const scrollToLatest = () => {
+            if (cards.length > 0) cards[cards.length - 1].scrollIntoView({ behavior: "smooth", block: "end" });
+        };
+
+        let isTyping = false;
+        let typingTimer = null;
 
         socket.on('userConnected', data => {
             addDataToDom(connectedAlert(data));
-            document.getElementById("chatroomType").innerHTML = `(Active: <span class="text-success">${data.activeUsers}</span>)`;
-            activeUsers.innerHTML = data.activeUsers;
-            if (cards.length > 4) cards[cards.length - 4].scrollIntoView();
+            updatePresence(data);
+            scrollToLatest();
         });
 
         socket.on('userDisconnected', data => {
-            addDataToDom(`<div class="alert alert-danger d-flex align-items-center msg shadow rounded" role="alert"><svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg><div><strong>${data.uname}</strong> is Disconnected</div></div>`);
-            document.getElementById("chatroomType").innerHTML = `(Active: <span class="text-success">${data.activeUsers}</span>)`;
-            activeUsers.innerHTML = data.activeUsers;
-            if (cards.length > 4) cards[cards.length - 4].scrollIntoView();
+            addDataToDom(`<div class="alert alert-danger d-flex align-items-center msg shadow rounded" role="alert"><svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg><div><strong>${data.uname || "Anonymous"}</strong> is Disconnected</div></div>`);
+            updatePresence(data);
+            scrollToLatest();
         })
+
+        socket.on("chat:presence", updatePresence);
+
+        socket.on('chat:history', messages => {
+            if (!Array.isArray(messages) || !messages.length) return;
+            messages.forEach(message => addDataToDom(cardBody(message)));
+            scrollToLatest();
+        });
 
         socket.on('userData', data => {
             addDataToDom(cardBody(data));
-            if (cards.length > 4) cards[cards.length - 4].scrollIntoView();
+            scrollToLatest();
         })
 
+        socket.on("typing:start", data => {
+            if (!data?.uname || data.uname === uname) return;
+            typingIndicator.textContent = `${data.uname} is typing...`;
+        });
+
+        socket.on("typing:stop", data => {
+            if (!data?.uname || data.uname === uname) return;
+            if (typingIndicator.textContent.includes(data.uname)) typingIndicator.textContent = "";
+        });
+
+        socket.on("connect", () => {
+            typingIndicator.textContent = "";
+        });
+
+        socket.on("disconnect", () => {
+            typingIndicator.textContent = "Disconnected. Reconnecting...";
+        });
+
+        socket.on("chat:error", data => {
+            if (data?.message) typingIndicator.textContent = data.message;
+        });
+
         const sendMsg = () => {
-            if ((chatTxtField.value).length > 0) {
-                socket.emit("sendMsg", { Msg: chatTxtField.value, PostedBy: uname, time: `${new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}` })
+            const message = (chatTxtField.value || "").trim();
+            if (message.length > 0) {
+                socket.emit("typing:stop");
+                socket.emit("sendMsg", { Msg: message, PostedBy: uname }, ({ ok, message: errMessage } = {}) => {
+                    if (!ok && errMessage) {
+                        typingIndicator.textContent = errMessage;
+                    }
+                });
                 chatTxtField.value = "";
+                isTyping = false;
             }
         }
 
-        addTextBtn.addEventListener("click", sendMsg());
+        addTextBtn.addEventListener("click", sendMsg);
         chatTxtField.addEventListener("keydown", (e) => {
             if (e.key === "Enter") {
                 sendMsg();
             }
+        });
+
+        chatTxtField.addEventListener("input", () => {
+            const hasText = chatTxtField.value.trim().length > 0;
+            if (hasText && !isTyping) {
+                isTyping = true;
+                socket.emit("typing:start");
+            }
+
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(() => {
+                if (isTyping) {
+                    socket.emit("typing:stop");
+                    isTyping = false;
+                }
+            }, 1000);
         });
     </script>
     <%- include('./partials/footer.ejs') %>
